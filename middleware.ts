@@ -5,20 +5,14 @@ import { NextResponse, type NextRequest } from 'next/server';
  * Vercel adds the visitor's country to every request (x-vercel-ip-country).
  * We store the matching currency in a small cookie; the site uses it unless
  * the visitor has already chosen a currency themselves (their choice always wins).
- * Countries not listed here see pounds (GBP).
+ * Countries we don't ship to see pounds (GBP).
  */
 
-const EURO = ['AT', 'BE', 'HR', 'CY', 'EE', 'FI', 'FR', 'DE', 'GR', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PT', 'SK', 'SI', 'ES', 'AD', 'MC', 'SM', 'VA', 'ME', 'XK'];
-
+// Countries we ship to (data/countries.ts) → their currency. Everyone else sees pounds.
 const COUNTRY_CURRENCY: Record<string, string> = {
-  ...Object.fromEntries(EURO.map((c) => [c, 'EUR'])),
-  GB: 'GBP', IM: 'GBP', JE: 'GBP', GG: 'GBP', GI: 'GBP',
-  US: 'USD', PR: 'USD',
-  CA: 'CAD', AU: 'AUD', NZ: 'NZD', CH: 'CHF', LI: 'CHF',
-  SE: 'SEK', NO: 'NOK', DK: 'DKK', GL: 'DKK', FO: 'DKK',
-  PL: 'PLN', CZ: 'CZK', HU: 'HUF', RO: 'RON', IS: 'ISK', TR: 'TRY',
-  JP: 'JPY', CN: 'CNY', HK: 'HKD', SG: 'SGD', KR: 'KRW', IN: 'INR',
-  ID: 'IDR', MY: 'MYR', PH: 'PHP', TH: 'THB', IL: 'ILS', MX: 'MXN', BR: 'BRL', ZA: 'ZAR',
+  GB: 'GBP', US: 'USD', CA: 'CAD', MX: 'MXN', AU: 'AUD', NZ: 'NZD',
+  FR: 'EUR', DE: 'EUR', IT: 'EUR', ES: 'EUR', PT: 'EUR', NL: 'EUR', FI: 'EUR',
+  SE: 'SEK', NO: 'NOK',
 };
 
 export const GEO_COOKIE = 'nolla-geo-currency';

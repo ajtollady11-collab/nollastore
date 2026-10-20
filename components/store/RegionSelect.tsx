@@ -7,7 +7,7 @@ import { REGIONS, REGION_IDS, isRegionId } from '@/data/regions';
 import { cn } from '@/lib/cn';
 
 /**
- * Currency selector (30 currencies). A native select underneath, so it's
+ * Currency selector. A native select underneath, so it's
  * keyboard- and screen-reader-friendly and uses the phone's own picker.
  */
 export function RegionSelect({ className, variant = 'compact' }: { className?: string; variant?: 'compact' | 'full' }) {

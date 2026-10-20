@@ -1,4 +1,5 @@
 import { site } from './site';
+import { SHIPPING_COUNTRIES_TEXT } from './countries';
 
 /**
  * ─────────────────────────────────────────────────────────────
@@ -223,7 +224,8 @@ export const shippingReturns: LegalPageContent = {
     {
       heading: 'Delivery',
       list: [
-        'Free tracked shipping worldwide.',
+        `We ship to ${SHIPPING_COUNTRIES_TEXT}. Shipping is free and tracked.`,
+        'We can’t currently accept orders for delivery to other countries.',
         'Outside the UK, optional express insured shipping is available at checkout for £11.13.',
         'Orders usually arrive in 4–10 working days.',
       ],

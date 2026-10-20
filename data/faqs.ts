@@ -1,4 +1,5 @@
 import { site } from './site';
+import { SHIPPING_COUNTRIES_TEXT } from './countries';
 
 /**
  * FAQ content. Keep answers consistent with data/legal.ts (Shipping & Returns)
@@ -40,7 +41,7 @@ export const faqs: FAQItem[] = [
     id: 'delivery',
     question: 'How does delivery work?',
     answer:
-      'Shipping is free worldwide, with tracking. Outside the UK you can also choose optional express insured shipping (£11.13) at checkout. Orders usually arrive in 4–10 working days. Delivery times are estimates rather than guarantees, and we’ll email your tracking details as soon as your order ships.',
+      `We ship to ${SHIPPING_COUNTRIES_TEXT}, and shipping is free and tracked to all of them. We can’t deliver to other countries at the moment. Outside the UK you can also choose optional express insured shipping (£11.13) at checkout. Orders usually arrive in 4–10 working days. Delivery times are estimates rather than guarantees, and we’ll email your tracking details as soon as your order ships.`,
   },
   {
     id: 'currency',

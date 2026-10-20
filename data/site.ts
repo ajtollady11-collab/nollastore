@@ -1,3 +1,5 @@
+import { SHIPPING_COUNTRIES_TEXT } from './countries';
+
 /**
  * Site-wide settings. Edit these values rather than hunting through components.
  */
@@ -66,7 +68,7 @@ export const socials: { name: string; href: string; icon: 'tiktok' | 'instagram'
 /** Sliding announcement bar: only offers that are genuinely configured */
 export const announcementItems = [
   'A free cloud pillow with every blanket',
-  'Free worldwide shipping',
+  'Free shipping',
   'Arrives in 4–10 working days',
   '14-day returns',
 ];
@@ -75,7 +77,7 @@ export const announcementItems = [
  * ─────────────────────────────────────────────────────────────
  *  DELIVERY METHODS (used by the cart total and the Square order)
  *  These are charged in GBP by the UK checkout.
- *  Free standard shipping worldwide. Outside the UK, express insured shipping is an optional paid upgrade.
+ *  Free standard shipping to every country in data/countries.ts. Outside the UK, express insured shipping is an optional paid upgrade.
  *  Delivery estimate: 4–10 working days (update DELIVERY_ESTIMATE if this changes).
  * ─────────────────────────────────────────────────────────────
  */
@@ -94,7 +96,7 @@ export const shippingRegions: Record<ShippingRegion, { id: ShippingRegion; label
     id: 'international',
     label: 'Outside the UK',
     methods: [
-      { id: 'intl-standard', label: 'Free worldwide shipping', price: 0, estimate: 'Tracked. Usually 4–10 working days' },
+      { id: 'intl-standard', label: 'Free shipping', price: 0, estimate: 'Tracked. Usually 4–10 working days' },
       { id: 'intl-express', label: 'Express insured shipping (optional)', price: 1113, estimate: 'Tracked and insured' },
     ],
   },
@@ -106,8 +108,8 @@ export const DELIVERY_ESTIMATE = '4–10 working days';
 /** Delivery wording reused across the site, so it can never contradict itself or the policy pages */
 export const deliveryCopy = {
   estimate: DELIVERY_ESTIMATE,
-  short: 'Free worldwide shipping',
-  detail: `Free tracked shipping to every country we deliver to. Usually arrives in ${DELIVERY_ESTIMATE}. Delivery times are estimates.`,
+  short: 'Free shipping',
+  detail: `Free tracked shipping to ${SHIPPING_COUNTRIES_TEXT}. Usually arrives in ${DELIVERY_ESTIMATE}. Delivery times are estimates.`,
   multiplePackages: 'Your blanket and pillow may arrive in separate packages, each with its own tracking.',
   returns: '14 days to change your mind',
   returnsDetail: 'Cancel for any reason within 14 days of receiving your order. Faulty or wrong items are on us.',

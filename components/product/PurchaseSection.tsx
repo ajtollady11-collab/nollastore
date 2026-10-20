@@ -120,7 +120,7 @@ export function PurchaseSection() {
             Buy it now
           </button>
           <p className="mt-3 text-center text-[0.84rem] text-charcoal/70">
-            Blanket <span className="text-taupe">+</span> free cloud pillow <span className="text-taupe">+</span> free worldwide shipping
+            Blanket <span className="text-taupe">+</span> free cloud pillow <span className="text-taupe">+</span> free shipping
           </p>
 
           <ul className="mt-7 divide-y divide-charcoal/10 border-y border-charcoal/10 text-[0.88rem]">

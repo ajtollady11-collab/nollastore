@@ -146,7 +146,9 @@ export function validateDelivery(input: Partial<DeliveryDetails> | undefined, sh
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) return { ok: false, error: 'Please enter a valid email address.', field: 'email' };
   if (d.name.length < 2) return { ok: false, error: 'Please enter your full name.', field: 'name' };
   if (d.phone.replace(/\D/g, '').length < 7) return { ok: false, error: 'Please enter a phone number for the courier.', field: 'phone' };
-  if (!countries.some((c) => c.code === d.country)) return { ok: false, error: 'Please choose your country.', field: 'country' };
+  if (!d.country) return { ok: false, error: 'Please choose your country.', field: 'country' };
+  // Only the countries in data/countries.ts can be delivered to
+  if (!countries.some((c) => c.code === d.country)) return { ok: false, error: 'Sorry, we don’t deliver to that country yet.', field: 'country' };
   if (d.address1.length < 3) return { ok: false, error: 'Please enter your address.', field: 'address1' };
   if (d.city.length < 2) return { ok: false, error: 'Please enter your town or city.', field: 'city' };
   if (d.postcode.length < 2) return { ok: false, error: 'Please enter your postcode.', field: 'postcode' };

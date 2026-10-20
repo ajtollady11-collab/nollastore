@@ -14,9 +14,8 @@
  */
 
 export const CURRENCY_CODES = [
-  'GBP', 'USD', 'EUR', 'CAD', 'AUD', 'NZD', 'CHF', 'SEK', 'NOK', 'DKK',
-  'PLN', 'CZK', 'HUF', 'RON', 'ISK', 'TRY', 'JPY', 'CNY', 'HKD', 'SGD',
-  'KRW', 'INR', 'IDR', 'MYR', 'PHP', 'THB', 'ILS', 'MXN', 'BRL', 'ZAR',
+  // Only the currencies of the countries we ship to (data/countries.ts)
+  'GBP', 'USD', 'EUR', 'CAD', 'MXN', 'AUD', 'NZD', 'SEK', 'NOK',
 ] as const;
 
 export type RegionId = (typeof CURRENCY_CODES)[number];
@@ -64,30 +63,9 @@ export const REGIONS: Record<RegionId, Region> = {
   CAD: C('CAD', '$', 'Canadian dollar', 'en-CA'),
   AUD: C('AUD', '$', 'Australian dollar', 'en-AU'),
   NZD: C('NZD', '$', 'New Zealand dollar', 'en-NZ'),
-  CHF: C('CHF', 'CHF', 'Swiss franc', 'de-CH'),
   SEK: C('SEK', 'kr', 'Swedish krona', 'sv-SE'),
   NOK: C('NOK', 'kr', 'Norwegian krone', 'nb-NO'),
-  DKK: C('DKK', 'kr', 'Danish krone', 'da-DK'),
-  PLN: C('PLN', 'zł', 'Polish złoty', 'pl-PL'),
-  CZK: C('CZK', 'Kč', 'Czech koruna', 'cs-CZ', true),
-  HUF: C('HUF', 'Ft', 'Hungarian forint', 'hu-HU', true),
-  RON: C('RON', 'lei', 'Romanian leu', 'ro-RO'),
-  ISK: C('ISK', 'kr', 'Icelandic króna', 'is-IS', true),
-  TRY: C('TRY', '₺', 'Turkish lira', 'tr-TR'),
-  JPY: C('JPY', '¥', 'Japanese yen', 'ja-JP', true),
-  CNY: C('CNY', '¥', 'Chinese yuan', 'zh-CN'),
-  HKD: C('HKD', '$', 'Hong Kong dollar', 'en-HK'),
-  SGD: C('SGD', '$', 'Singapore dollar', 'en-SG'),
-  KRW: C('KRW', '₩', 'South Korean won', 'ko-KR', true),
-  INR: C('INR', '₹', 'Indian rupee', 'en-IN'),
-  IDR: C('IDR', 'Rp', 'Indonesian rupiah', 'id-ID', true),
-  MYR: C('MYR', 'RM', 'Malaysian ringgit', 'ms-MY'),
-  PHP: C('PHP', '₱', 'Philippine peso', 'en-PH'),
-  THB: C('THB', '฿', 'Thai baht', 'th-TH'),
-  ILS: C('ILS', '₪', 'Israeli new shekel', 'he-IL'),
   MXN: C('MXN', '$', 'Mexican peso', 'es-MX'),
-  BRL: C('BRL', 'R$', 'Brazilian real', 'pt-BR'),
-  ZAR: C('ZAR', 'R', 'South African rand', 'en-ZA'),
 };
 
 /**
@@ -95,9 +73,7 @@ export const REGIONS: Record<RegionId, Region> = {
  * Only used if live rates can't be fetched (see RATES_URL). Approximate.
  */
 export const FALLBACK_RATES: Record<RegionId, number> = {
-  GBP: 1, USD: 1.34, EUR: 1.17, CAD: 1.85, AUD: 2.05, NZD: 2.25, CHF: 1.08, SEK: 12.8, NOK: 13.5, DKK: 8.7,
-  PLN: 4.95, CZK: 29.2, HUF: 460, RON: 5.9, ISK: 185, TRY: 55, JPY: 200, CNY: 9.7, HKD: 10.5, SGD: 1.73,
-  KRW: 1850, INR: 115, IDR: 22000, MYR: 5.75, PHP: 77, THB: 44, ILS: 4.6, MXN: 25, BRL: 7.4, ZAR: 24,
+  GBP: 1, USD: 1.34, EUR: 1.17, CAD: 1.85, MXN: 25, AUD: 2.05, NZD: 2.25, SEK: 12.8, NOK: 13.5,
 };
 
 /** Free, keyless exchange-rate feed (GBP base). Cached on each device for 12 hours. */

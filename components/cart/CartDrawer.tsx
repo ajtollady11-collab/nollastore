@@ -172,7 +172,7 @@ export function CartDrawer() {
                 </div>
                 <div className="flex items-baseline justify-between gap-4 text-charcoal/60">
                   <dt>Delivery</dt>
-                  <dd className="text-right">Free worldwide</dd>
+                  <dd className="text-right">Free</dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-4 text-charcoal/60">
                   <dt>Arrives in</dt>

@@ -2,7 +2,7 @@
 
 *make staying in feel better.*
 
-A one-product storefront for the **Nolla Nuv™ Velvet Blanket**: 6 colours × 3 sizes, 30 display currencies, and a free Nimbus™ cloud pillow with every blanket.
+A one-product storefront for the **Nolla Nuv™ Velvet Blanket**: 6 colours × 3 sizes, 9 display currencies (one per country we ship to), and a free Nimbus™ cloud pillow with every blanket.
 Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS. Square checkout (UK, GBP) is built in.
 
 ## Run it
