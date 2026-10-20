@@ -16,6 +16,7 @@ export function ProductGallery({ colour }: { colour: ColourId }) {
   const [index, setIndex] = useState(0);
   const [viewer, setViewer] = useState<number | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const thumbsRef = useRef<HTMLUListElement>(null);
   const colourLabel = getColour(colour)?.label ?? '';
 
   const goTo = useCallback((i: number, smooth = true) => {
@@ -25,6 +26,15 @@ export function ProductGallery({ colour }: { colour: ColourId }) {
     track.scrollTo({ left: clamped * track.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
     setIndex(clamped);
   }, []);
+
+  // Keep the active thumbnail in view (horizontal only, never scrolls the page)
+  useEffect(() => {
+    const row = thumbsRef.current;
+    const thumb = row?.children[index] as HTMLElement | undefined;
+    if (!row || !thumb) return;
+    const left = thumb.offsetLeft - row.clientWidth / 2 + thumb.clientWidth / 2;
+    row.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+  }, [index]);
 
   // New colour → back to its first photo
   useEffect(() => {
@@ -107,9 +117,9 @@ export function ProductGallery({ colour }: { colour: ColourId }) {
       </div>
 
       {/* Thumbnails */}
-      <ul className="mt-3 grid grid-cols-7 gap-1.5 sm:gap-2" aria-label="Choose a photo">
+      <ul ref={thumbsRef} className="no-scrollbar mt-3 flex gap-1.5 overflow-x-auto px-[3px] py-[3px] sm:gap-2" aria-label="Choose a photo">
         {images.map((img, i) => (
-          <li key={img.src}>
+          <li key={img.src} className="w-[17%] shrink-0 sm:w-[13%]">
             <button
               type="button"
               onClick={() => goTo(i)}

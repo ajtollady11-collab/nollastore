@@ -246,14 +246,41 @@ export function photoFor(colourId: ColourId, scene: 'draped' | 'wrapped' | 'text
   };
 }
 
+/**
+ * Outdoor photoshoot (6 per colour) in /public/images/nuv-outdoor.
+ * Order: 1 sitting on a rock in the stream (whole blanket visible, the MAIN image),
+ * 2 reclining on a fallen tree, 3 reclining (wide), 4 close-up, 5 by the tree, 6 among the roots.
+ */
+const OUTDOOR_ALTS = [
+  'sitting on a rock by a woodland stream, the whole blanket draped around her',
+  'reclining on a fallen tree, the blanket flowing to the ground',
+  'leaning back on a fallen tree, wrapped in the blanket',
+  'close-up, hugging the blanket around her shoulders',
+  'sitting on a rock beside a tree, wrapped in the blanket',
+  'resting among tree roots, wrapped in the blanket',
+];
+
+export function outdoorPhotosFor(colourId: ColourId): ImageAsset[] {
+  const colour = getColour(colourId) ?? COLOURS[0];
+  return OUTDOOR_ALTS.map((desc, i) => ({
+    src: `/images/nuv-outdoor/nuv-${colour.photos}-outdoor-${i + 1}.webp`,
+    alt: `A woman in the ${colour.label.toLowerCase()} Nolla Nuv blanket, ${desc}.`,
+  }));
+}
+
+/** Gallery: new outdoor and original indoor photos alternate (new first), then the free pillow. */
 export function galleryFor(colourId: ColourId): ImageAsset[] {
   const colour = getColour(colourId) ?? COLOURS[0];
-  const shots = SCENES.map((s) => photoFor(colour.id, s.key as Parameters<typeof photoFor>[1]));
+  const indoor = SCENES.map((s) => photoFor(colour.id, s.key as Parameters<typeof photoFor>[1]));
   // White has an extra snuggled-up shot (the only colour photographed this way)
-  if (colour.id === 'white') {
-    shots.splice(2, 0, photoFor('white', 'snuggled'));
+  if (colour.id === 'white') indoor.splice(2, 0, photoFor('white', 'snuggled'));
+  const outdoor = outdoorPhotosFor(colour.id);
+  const mixed: ImageAsset[] = [];
+  for (let i = 0; i < Math.max(outdoor.length, indoor.length); i++) {
+    if (outdoor[i]) mixed.push(outdoor[i]);
+    if (indoor[i]) mixed.push(indoor[i]);
   }
-  return [...shots, { ...GIFT.image, alt: `Included free: ${GIFT.image.alt}` }];
+  return [...mixed, { ...GIFT.image, alt: `Included free: ${GIFT.image.alt}` }];
 }
 
 /** Thumbnail for cart lines */
