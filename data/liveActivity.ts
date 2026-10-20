@@ -12,7 +12,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 export const liveActivity = {
-  enabled: false,
+  enabled: true,
   /** Shown while the real figure loads (and if `source` is null) */
   count: 41,
   /** e.g. '/api/live-count' returning { count: number }. null = use `count` */
