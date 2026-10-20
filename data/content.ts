@@ -93,3 +93,16 @@ export const finalCta = {
     alt: 'Someone wrapped up in the white Nuv blanket in a sunny armchair.',
   } satisfies ImageAsset,
 };
+
+/**
+ * "See Nolla in real life" videos (from the original Nolla site).
+ * Files live in /public/videos: a compressed silent .mp4 and a .jpg still for each.
+ * Remove an entry to hide that clip; an empty list hides the section.
+ */
+export const ugcVideos: { src: string; poster: string; label: string }[] = [
+  { src: '/videos/nolla-01.mp4', poster: '/videos/nolla-01.jpg', label: 'Unrolling a chocolate-brown faux-fur blanket on a bed.' },
+  { src: '/videos/nolla-02.mp4', poster: '/videos/nolla-02.jpg', label: 'Shaking out a brown faux-fur blanket over a bed.' },
+  { src: '/videos/nolla-03.mp4', poster: '/videos/nolla-03.jpg', label: 'A stack of folded faux-fur blankets in different colours on a bed.' },
+  { src: '/videos/nolla-04.mp4', poster: '/videos/nolla-04.jpg', label: 'White and grey faux-fur blankets layered across a bed.' },
+  { src: '/videos/nolla-05.mp4', poster: '/videos/nolla-05.jpg', label: 'Close-up of a dark brown faux-fur blanket.' },
+];

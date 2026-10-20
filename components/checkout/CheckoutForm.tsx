@@ -13,6 +13,7 @@ import { useRegion } from '@/components/store/RegionProvider';
 import { TM } from '@/components/ui/TM';
 import { shippingRegions } from '@/data/site';
 import { linePrice } from '@/lib/cart';
+import { formatPrice } from '@/lib/format';
 import { startCheckout } from '@/lib/checkout';
 import type { DeliveryDetails } from '@/lib/order';
 import { cn } from '@/lib/cn';
@@ -34,11 +35,12 @@ const SAVED_KEY = 'nolla-delivery-v1';
 
 export function CheckoutForm() {
   const {
-    ready, lines, subtotal, discountAmount, discountCode, shippingCost, total,
+    ready, lines, chargeSubtotal: subtotal, discountAmount, discountCode, shippingCost, total,
     shippingRegion, setShippingRegion, shippingMethod, setShippingMethod,
     gifts,
   } = useCart();
-  const { region, info, money: formatPrice, setRegion, ready: regionReady } = useRegion();
+  const { region, info, setRegion, ready: regionReady } = useRegion();
+  const payingInOtherCurrency = region !== 'GBP';
   const [d, setD] = useState<DeliveryDetails>(EMPTY);
   const [error, setError] = useState<string | null>(null);
   const [badField, setBadField] = useState<keyof DeliveryDetails | null>(null);
@@ -101,10 +103,10 @@ export function CheckoutForm() {
         key: l.key,
         variant: describeSelection(l.selection),
         qty: l.quantity,
-        price: linePrice(l, region) * l.quantity,
+        price: linePrice(l, 'GBP') * l.quantity,
         img: cartImageFor(l.selection.colour),
       })),
-    [lines, region],
+    [lines],
   );
 
   if (!ready || !regionReady) return <div className="min-h-[50vh]" aria-busy="true" />;
@@ -112,11 +114,11 @@ export function CheckoutForm() {
   if (!info.checkout.enabled) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center text-center">
-        <h1 className="font-serif text-[2.4rem] font-light tracking-[-0.035em]">Checkout isn’t open here yet.</h1>
+        <h1 className="font-serif text-[2.4rem] font-light tracking-[-0.035em]">Checkout in {region} isn’t open yet.</h1>
         <p className="mt-4 max-w-[52ch] text-charcoal/65">{info.checkout.closedMessage}</p>
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-          <Button onClick={() => setRegion('uk')} size="lg">
-            Switch to the UK store (£)
+          <Button onClick={() => setRegion('GBP')} size="lg">
+            Switch to pounds (£ GBP)
           </Button>
           <Button href="/#shop" variant="secondary" size="lg">
             Back to the shop
@@ -240,6 +242,12 @@ export function CheckoutForm() {
         {error && (
           <p role="alert" className="mt-6 rounded-soft bg-mocha-soft px-4 py-3 text-sm text-charcoal/80">
             {error}
+          </p>
+        )}
+
+        {payingInOtherCurrency && (
+          <p className="mt-6 rounded-soft border border-charcoal/10 bg-ivory px-4 py-3 text-[0.85rem] leading-relaxed text-charcoal/70">
+            You’re browsing in {region}. Orders are charged in pounds (GBP), so you’ll pay {formatPrice(total)} and your card provider converts it.
           </p>
         )}
 

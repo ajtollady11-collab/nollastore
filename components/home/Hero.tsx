@@ -1,4 +1,4 @@
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Gift } from 'lucide-react';
 import { SmartImage } from '@/components/ui/SmartImage';
 import { Button } from '@/components/ui/Button';
 import { TM } from '@/components/ui/TM';
@@ -40,6 +40,10 @@ export function Hero() {
 function HeroCopy({ desktop }: { desktop?: boolean }) {
   return (
     <>
+      <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-espresso px-3.5 py-1.5 text-[0.78rem] font-medium text-ivory">
+        <Gift className="h-3.5 w-3.5" aria-hidden />
+        Free cloud pillow with every blanket
+      </p>
       <p className="eyebrow">
         <TM>{hero.eyebrow}</TM>
       </p>

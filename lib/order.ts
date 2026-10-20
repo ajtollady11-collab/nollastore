@@ -47,10 +47,13 @@ function findShipping(id: string) {
 }
 
 export function priceOrder(inputLines: OrderInputLine[], shippingId: string, code: string | null | undefined, regionInput: unknown): OrderResult {
-  if (!isRegionId(regionInput)) return { ok: false, error: 'Please choose a storefront.' };
-  const region = regionInput;
+  // regionInput = the currency the shopper browsed in; everything is charged in GBP
+  // Older carts may send 'uk' / 'us'
+  const normalised = regionInput === 'uk' ? 'GBP' : regionInput === 'us' ? 'USD' : regionInput;
+  if (!isRegionId(normalised)) return { ok: false, error: 'Please choose a currency.' };
+  const region = normalised;
   if (!REGIONS[region].checkout.enabled) {
-    return { ok: false, error: REGIONS[region].checkout.closedMessage ?? 'Checkout isn’t available for this storefront yet.' };
+    return { ok: false, error: REGIONS[region].checkout.closedMessage ?? 'Checkout isn’t available in this currency yet.' };
   }
   if (!Array.isArray(inputLines) || inputLines.length === 0) return { ok: false, error: 'Your bag is empty.' };
   if (inputLines.length > 20) return { ok: false, error: 'Too many items in the bag.' };
@@ -69,14 +72,13 @@ export function priceOrder(inputLines: OrderInputLine[], shippingId: string, cod
       // Supplier colour name in brackets when it differs, so the order is unambiguous to fulfil
       variant: `${colour.label}${colour.supplierName !== colour.label ? ` (${colour.supplierName})` : ''} / ${size.label}`,
       quantity: qty,
-      unitPrice: priceFor(size.id, region).price,
+      // Checkout always charges the GBP price (converted currencies are display-only)
+      unitPrice: priceFor(size.id, 'GBP').price,
     });
   }
 
-  // Delivery methods are priced in GBP; they only apply to a GBP order
   const shippingMethod = findShipping(shippingId);
   if (!shippingMethod) return { ok: false, error: 'Please choose a delivery option.' };
-  if (REGIONS[region].currency !== 'GBP') return { ok: false, error: 'Delivery for this storefront isn’t configured yet.' };
 
   const subtotal = lines.reduce((s, l) => s + l.unitPrice * l.quantity, 0);
   const validCode = normaliseCode(code);
@@ -94,7 +96,7 @@ export function priceOrder(inputLines: OrderInputLine[], shippingId: string, cod
     ok: true,
     order: {
       region,
-      currency: REGIONS[region].currency,
+      currency: 'GBP',
       lines,
       subtotal,
       discount,

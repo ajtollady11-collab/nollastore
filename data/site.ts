@@ -63,23 +63,21 @@ export const footerLinks = [
  */
 export const socials: { name: string; href: string; icon: 'tiktok' | 'instagram' | 'pinterest' }[] = [];
 
-/**
- * Announcement bar. `everywhere` shows in both storefronts;
- * `uk` / `us` add region-specific lines (only offers that are genuinely configured).
- * On phones only the first message shows.
- */
-export const announcement = {
-  everywhere: ['A little cloud pillow comes free with every blanket'],
-  uk: ['Free UK delivery', '14-day returns'],
-  us: ['Now showing US prices'],
-};
+/** Sliding announcement bar: only offers that are genuinely configured */
+export const announcementItems = [
+  'A free cloud pillow with every blanket',
+  'Free UK delivery',
+  'Arrives in 4–10 working days',
+  'Worldwide shipping',
+  '14-day returns',
+];
 
 /**
  * ─────────────────────────────────────────────────────────────
  *  DELIVERY METHODS (used by the cart total and the Square order)
  *  These are charged in GBP by the UK checkout.
  *  UK: free standard only. Everywhere else: standard or express insured.
- *  UK estimate is based on CJ's figures (1–4 days processing + 4–7 days delivery).
+ *  Delivery estimate: 4–10 working days (update DELIVERY_ESTIMATE if this changes).
  * ─────────────────────────────────────────────────────────────
  */
 export type ShippingRegion = 'uk' | 'international';
@@ -91,22 +89,28 @@ export const shippingRegions: Record<ShippingRegion, { id: ShippingRegion; label
   uk: {
     id: 'uk',
     label: 'United Kingdom',
-    methods: [{ id: 'uk-free', label: 'Free UK delivery', price: 0, estimate: 'Usually 5–11 working days' }],
+    methods: [{ id: 'uk-free', label: 'Free UK delivery', price: 0, estimate: 'Usually 4–10 working days' }],
   },
   international: {
     id: 'international',
     label: 'Outside the UK',
     methods: [
-      // PLACEHOLDER: confirm international delivery times with the supplier
-      { id: 'intl-standard', label: 'Standard delivery', price: 671, estimate: 'Tracked. Times vary by country' },
-      { id: 'intl-express', label: 'Express insured shipping', price: 1113, estimate: 'Faster, tracked and insured' },
+      { id: 'intl-standard', label: 'Standard delivery', price: 671, estimate: 'Tracked. Usually 4–10 working days' },
+      { id: 'intl-express', label: 'Express insured shipping', price: 1113, estimate: 'Tracked and insured. Usually 4–10 working days' },
     ],
   },
 };
 
-/** Delivery wording reused across the site, so it can never contradict the Shipping & Returns page */
+/** The one delivery estimate used everywhere */
+export const DELIVERY_ESTIMATE = '4–10 working days';
+
+/** Delivery wording reused across the site, so it can never contradict itself or the policy pages */
 export const deliveryCopy = {
-  ukEstimate: '5–11 working days',
+  estimate: DELIVERY_ESTIMATE,
+  short: 'Free UK delivery',
+  /** Purchase panel. {intl} is replaced with the international price in the shopper's currency */
+  detail: `Free in the UK. Worldwide from {intl}, shown at checkout. Usually arrives in ${DELIVERY_ESTIMATE}. Delivery times are estimates.`,
+  intlFrom: 671,
   multiplePackages: 'Your blanket and pillow may arrive in separate packages, each with its own tracking.',
   returns: '14 days to change your mind',
   returnsDetail: 'Cancel for any reason within 14 days of receiving your order. Faulty or wrong items are on us.',

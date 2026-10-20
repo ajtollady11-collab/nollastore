@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Gift } from 'lucide-react';
 import { useSelection } from './SelectionProvider';
 import { PRIMARY_ADD_ID } from './PurchaseSection';
 import { useCart } from '@/components/cart/CartProvider';
 import { useRegion } from '@/components/store/RegionProvider';
 import { SmartImage } from '@/components/ui/SmartImage';
-import { cartImageFor, describeSelection, priceFor } from '@/data/product';
+import { cartImageFor, describeSelection } from '@/data/product';
 import { cn } from '@/lib/cn';
 
 /**
@@ -17,7 +18,7 @@ import { cn } from '@/lib/cn';
 export function StickyPurchaseBar() {
   const { selection } = useSelection();
   const { add, isOpen } = useCart();
-  const { region, money, ready } = useRegion();
+  const { money, ready, price: priceOf } = useRegion();
   const [pastButton, setPastButton] = useState(false);
   const [nearEnd, setNearEnd] = useState(false);
 
@@ -47,7 +48,7 @@ export function StickyPurchaseBar() {
 
   const visible = pastButton && !nearEnd && !isOpen;
   const img = cartImageFor(selection.colour);
-  const { price } = priceFor(selection.size, region);
+  const { price } = priceOf(selection.size);
 
   return (
     <div
@@ -67,9 +68,14 @@ export function StickyPurchaseBar() {
             <span className="hidden sm:inline">Nuv™ Velvet Blanket · </span>
             {describeSelection(selection)}
           </p>
-          <a href="#shop" className="text-[0.78rem] text-charcoal/60 underline decoration-charcoal/20 underline-offset-4">
-            Change
-          </a>
+          <div className="flex items-center gap-3">
+            <p className="flex items-center gap-1 text-[0.75rem] font-medium text-mocha">
+              <Gift className="h-3 w-3" aria-hidden />+ free cloud pillow
+            </p>
+            <a href="#shop" className="text-[0.75rem] text-charcoal/60 underline decoration-charcoal/20 underline-offset-4">
+              Change
+            </a>
+          </div>
         </div>
         <button
           type="button"

@@ -11,7 +11,7 @@ import { useRegion } from '@/components/store/RegionProvider';
 /**
  * The bag. Saved to this device so it survives refreshes and page changes.
  * Prices are never stored: they're worked out for the current storefront,
- * so switching UK ↔ US re-prices everything at once.
+ * so switching currency re-prices everything at once. Checkout totals are GBP.
  */
 
 // Bumped when the catalogue changed to the single blanket, so old carts (Nest, Nook) are dropped
@@ -23,7 +23,10 @@ type CartContextValue = {
   count: number;
   /** Free pillows the bag has earned */
   gifts: number;
+  /** In the shopper's currency, for display */
   subtotal: number;
+  /** In GBP: what checkout charges */
+  chargeSubtotal: number;
   shippingRegion: ShippingRegion;
   setShippingRegion: (region: ShippingRegion) => void;
   shippingMethod: ShippingMethodId;
@@ -51,7 +54,7 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const { region } = useRegion();
+  const { region, rates } = useRegion();
   const [state, dispatch] = useReducer(cartReducer, { lines: [] } satisfies CartState);
   const [isOpen, setIsOpen] = useState(false);
   const [lastAddedKey, setLastAddedKey] = useState<string | null>(null);
@@ -125,10 +128,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setAnnouncement('Item removed from your bag.');
   }, []);
 
-  const subtotal = cartSubtotal(state.lines, region);
+  const subtotal = cartSubtotal(state.lines, region, rates);
+  const chargeSubtotal = cartSubtotal(state.lines, 'GBP');
   const method = shippingRegions[shippingRegion].methods.find((m) => m.id === shippingMethod) ?? shippingRegions[shippingRegion].methods[0];
   const shippingCost = state.lines.length ? method.price : 0;
-  const discountAmount = discountCode ? Math.round((subtotal * discountCodes[discountCode].percent) / 100) : 0;
+  const discountAmount = discountCode ? Math.round((chargeSubtotal * discountCodes[discountCode].percent) / 100) : 0;
 
   const applyDiscountCode = useCallback((code: string) => {
     const valid = normaliseCode(code);
@@ -147,6 +151,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       count: blanketCount(state.lines),
       gifts: giftCount(state.lines),
       subtotal,
+      chargeSubtotal,
       shippingRegion,
       setShippingRegion,
       shippingMethod: method.id,
@@ -156,7 +161,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       applyDiscountCode,
       removeDiscountCode,
       discountAmount,
-      total: subtotal - discountAmount + shippingCost,
+      total: chargeSubtotal - discountAmount + shippingCost,
       clear,
       ready,
       isOpen,
@@ -168,7 +173,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       lastAddedKey,
       announcement,
     }),
-    [state.lines, subtotal, shippingRegion, setShippingRegion, method.id, shippingCost, discountCode, applyDiscountCode, removeDiscountCode, discountAmount, clear, ready, isOpen, open, close, add, setQuantity, remove, lastAddedKey, announcement],
+    [state.lines, subtotal, chargeSubtotal, shippingRegion, setShippingRegion, method.id, shippingCost, discountCode, applyDiscountCode, removeDiscountCode, discountAmount, clear, ready, isOpen, open, close, add, setQuantity, remove, lastAddedKey, announcement],
   );
 
   return (

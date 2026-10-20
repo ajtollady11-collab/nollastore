@@ -79,7 +79,7 @@ export function Header() {
           <Logo />
 
           <div className="flex items-center justify-end gap-1">
-            <RegionSelect className="hidden md:inline-flex" />
+            <RegionSelect className="-mr-1 sm:mr-0" />
             <CartButton className="-mr-2.5" />
           </div>
         </div>

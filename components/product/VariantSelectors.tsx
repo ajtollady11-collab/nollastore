@@ -1,6 +1,6 @@
 'use client';
 
-import { COLOURS, SIZES, getColour, priceFor, type ColourId, type SizeId } from '@/data/product';
+import { COLOURS, SIZES, getColour, type ColourId, type SizeId } from '@/data/product';
 import { useRegion } from '@/components/store/RegionProvider';
 import { cn } from '@/lib/cn';
 
@@ -65,7 +65,7 @@ export function SizeSelector({
   onOpenGuide?: () => void;
   name?: string;
 }) {
-  const { region, money, ready } = useRegion();
+  const { money, ready, price: priceOf } = useRegion();
   return (
     <fieldset>
       <div className="flex items-baseline justify-between">
@@ -79,7 +79,7 @@ export function SizeSelector({
       <div className="mt-3 space-y-2">
         {SIZES.map((s) => {
           const selected = s.id === value;
-          const { price, reference } = priceFor(s.id, region);
+          const { price, reference } = priceOf(s.id);
           const unavailable = s.available === false;
           return (
             <label

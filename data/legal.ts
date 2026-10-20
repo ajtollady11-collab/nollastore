@@ -143,7 +143,7 @@ export const termsAndConditions: LegalPageContent = {
     {
       heading: '3. Prices',
       p: [
-        'Prices are shown in GBP (£) on our UK storefront and in US dollars ($) on our US storefront. Orders placed through our current checkout are charged in GBP. The price that applies to your order is the price displayed at checkout when you place it.',
+        'You can view prices in a number of currencies. Prices in currencies other than GBP and USD are converted from our GBP prices at current exchange rates and are approximate. Orders are charged in GBP (£); if you pay with a card in another currency, your card provider converts the amount and may charge a fee. The price that applies to your order is the GBP price shown at checkout.',
         'Where we show a limited-time offer next to a regular price, the offer applies only for as long as it is shown on our website.',
         'We reserve the right to correct pricing or product information errors. If an error materially affects an order you have placed, we will contact you before processing the order where reasonably possible.',
       ],
@@ -169,7 +169,7 @@ export const termsAndConditions: LegalPageContent = {
     {
       heading: '7. Delivery',
       p: [
-        'UK delivery is free and usually takes 5–11 working days. International delivery is charged at checkout and delivery times vary by destination. Delivery times are estimates, not guarantees.',
+        'UK delivery is free. International delivery is charged at checkout. Orders usually arrive in 4–10 working days. Delivery times are estimates, not guarantees.',
         'Orders containing more than one product may arrive in separate packages, as products may be fulfilled from different locations or become ready for dispatch at different times. If your order is split, you may receive separate tracking information for each package.',
         'Please see our Shipping & Returns page for more information.',
       ],
@@ -223,8 +223,9 @@ export const shippingReturns: LegalPageContent = {
     {
       heading: 'Delivery',
       list: [
-        'UK: free delivery, usually 5–11 working days.',
-        'Outside the UK: standard delivery £6.71, or express insured shipping £11.13. Delivery times vary by country.',
+        'UK: free delivery.',
+        'Outside the UK: standard delivery £6.71, or express insured shipping £11.13.',
+        'Orders usually arrive in 4–10 working days.',
       ],
       after: [
         'Delivery times are estimates. Your order may arrive in more than one package, and you may receive separate tracking for each. We’ll email you tracking details as soon as your order ships.',

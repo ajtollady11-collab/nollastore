@@ -1,7 +1,7 @@
 'use client';
 
 import { useRegion } from '@/components/store/RegionProvider';
-import { PROMOTION, priceFor, type SizeId } from '@/data/product';
+import { PROMOTION, type SizeId } from '@/data/product';
 import { cn } from '@/lib/cn';
 
 /** A storefront-aware amount. Hidden for a moment until the saved storefront loads. */
@@ -19,8 +19,8 @@ export function Money({ amount, className }: { amount: number; className?: strin
  * when the offer is on and a reference is configured for this storefront.
  */
 export function SizePrice({ size, variant = 'panel', className }: { size: SizeId; variant?: 'panel' | 'inline'; className?: string }) {
-  const { region, money, ready } = useRegion();
-  const { price, reference } = priceFor(size, region);
+  const { money, ready, price: priceOf } = useRegion();
+  const { price, reference } = priceOf(size);
 
   if (variant === 'inline') {
     return (

@@ -76,6 +76,12 @@ export function ProductGallery({ colour }: { colour: ColourId }) {
                     className="object-cover"
                   />
                 </button>
+                {!isGift && i === 0 && (
+                  <span className="pointer-events-none absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-espresso px-3 py-1.5 text-[0.75rem] font-medium text-ivory">
+                    <Gift className="h-3.5 w-3.5" aria-hidden />
+                    Free cloud pillow included
+                  </span>
+                )}
                 {isGift && (
                   <span className="pointer-events-none absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-ivory/95 px-3 py-1.5 text-[0.75rem] font-medium text-charcoal">
                     <Gift className="h-3.5 w-3.5 text-mocha" aria-hidden />

@@ -1,4 +1,4 @@
-import { giftQuantity, isValidSelection, priceFor, type Selection } from '@/data/product';
+import { giftQuantity, isValidSelection, priceFor, type Rates, type Selection } from '@/data/product';
 import type { RegionId } from '@/data/regions';
 
 /**
@@ -6,7 +6,7 @@ import type { RegionId } from '@/data/regions';
  * A cart line is one colour/size combination of the blanket. The free pillow is
  * never stored as a line: it's derived from the blankets (see giftQuantity).
  * Lines don't store prices either: the price always comes from data/product.ts
- * for the current storefront, so switching UK ↔ US re-prices the whole cart.
+ * for the current currency, so switching currency re-prices the whole cart.
  */
 
 export type CartLine = {
@@ -69,7 +69,7 @@ export const blanketCount = (lines: CartLine[]) => lines.reduce((n, l) => n + l.
 /** Free pillows earned by the cart (rule set in data/product.ts → GIFT.mode) */
 export const giftCount = (lines: CartLine[]) => giftQuantity(blanketCount(lines));
 
-export const linePrice = (line: CartLine, region: RegionId) => priceFor(line.selection.size, region).price;
+export const linePrice = (line: CartLine, region: RegionId, rates?: Rates) => priceFor(line.selection.size, region, rates).price;
 
-export const cartSubtotal = (lines: CartLine[], region: RegionId) =>
-  lines.reduce((sum, l) => sum + linePrice(l, region) * l.quantity, 0);
+export const cartSubtotal = (lines: CartLine[], region: RegionId, rates?: Rates) =>
+  lines.reduce((sum, l) => sum + linePrice(l, region, rates) * l.quantity, 0);

@@ -7,14 +7,17 @@ import { useRegion } from '@/components/store/RegionProvider';
 import { Button } from '@/components/ui/Button';
 import { SmartImage } from '@/components/ui/SmartImage';
 import { TM } from '@/components/ui/TM';
-import { GIFT, PRODUCT, cartImageFor, getColour, getSize, priceFor } from '@/data/product';
+import { GIFT, PRODUCT, cartImageFor, getColour, getSize } from '@/data/product';
+import { deliveryCopy } from '@/data/site';
+import { formatPrice } from '@/lib/format';
 import { MAX_QTY } from '@/lib/cart';
 import { cn } from '@/lib/cn';
 
 /** Slide-in bag. Full height on the right; full width on phones. */
 export function CartDrawer() {
   const { lines, gifts, isOpen, close, subtotal, setQuantity, remove, lastAddedKey } = useCart();
-  const { region, info, money, setRegion } = useRegion();
+  const { info, money, setRegion, price, converted } = useRegion();
+  const { chargeSubtotal } = useCart();
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -70,6 +73,13 @@ export function CartDrawer() {
         ) : (
           <>
             <div className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-7">
+              <div className="mt-4 flex items-center gap-3 rounded-soft bg-espresso px-4 py-3 text-ivory">
+                <Gift className="h-4 w-4 shrink-0" aria-hidden />
+                <p className="text-[0.85rem]">
+                  <span className="font-medium">Free cloud pillow unlocked</span>
+                  <span className="text-ivory/70"> · {gifts > 1 ? `${gifts} pillows, one with each blanket` : 'one with every blanket'}</span>
+                </p>
+              </div>
               {justAdded && (
                 <p className="mt-4 flex animate-fade items-center gap-2 text-[0.85rem] text-charcoal/75">
                   <span className="grid h-5 w-5 place-items-center rounded-full bg-charcoal text-ivory">
@@ -83,7 +93,7 @@ export function CartDrawer() {
                 {lines.map((line) => {
                   const colour = getColour(line.selection.colour)!;
                   const size = getSize(line.selection.size)!;
-                  const unit = priceFor(size.id, region).price;
+                  const unit = price(size.id).price;
                   const img = cartImageFor(colour.id);
                   return (
                     <li key={line.key} className="flex gap-4 py-5">
@@ -162,7 +172,11 @@ export function CartDrawer() {
                 </div>
                 <div className="flex items-baseline justify-between gap-4 text-charcoal/60">
                   <dt>Delivery</dt>
-                  <dd className="text-right">{region === 'uk' ? 'Free in the UK · other countries at checkout' : 'Shown at checkout'}</dd>
+                  <dd className="text-right">Free in the UK · worldwide at checkout</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4 text-charcoal/60">
+                  <dt>Arrives in</dt>
+                  <dd className="text-right">{deliveryCopy.estimate}</dd>
                 </div>
               </dl>
 
@@ -172,12 +186,15 @@ export function CartDrawer() {
                     Checkout
                   </Button>
                   <p className="mt-2.5 text-center text-[0.75rem] text-charcoal/50">Secure payment by Square. Card, Apple Pay and Google Pay.</p>
+                  {converted && (
+                    <p className="mt-1 text-center text-[0.75rem] text-charcoal/50">Charged in GBP: {formatPrice(chargeSubtotal)} before any delivery. Your card provider converts it.</p>
+                  )}
                 </>
               ) : (
                 <div className="mt-5">
                   <p className="text-[0.82rem] leading-relaxed text-charcoal/65">{info.checkout.closedMessage}</p>
-                  <Button onClick={() => setRegion('uk')} variant="secondary" size="md" fullWidth className="mt-3">
-                    Switch to the UK store (£)
+                  <Button onClick={() => setRegion('GBP')} variant="secondary" size="md" fullWidth className="mt-3">
+                    Switch to pounds (£ GBP)
                   </Button>
                 </div>
               )}

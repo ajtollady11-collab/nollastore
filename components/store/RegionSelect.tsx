@@ -7,7 +7,7 @@ import { REGIONS, REGION_IDS, isRegionId } from '@/data/regions';
 import { cn } from '@/lib/cn';
 
 /**
- * Storefront selector (UK £ / US $). A native select underneath, so it's
+ * Currency selector (30 currencies). A native select underneath, so it's
  * keyboard- and screen-reader-friendly and uses the phone's own picker.
  */
 export function RegionSelect({ className, variant = 'compact' }: { className?: string; variant?: 'compact' | 'full' }) {
@@ -16,7 +16,7 @@ export function RegionSelect({ className, variant = 'compact' }: { className?: s
   return (
     <div className={cn('relative inline-flex items-center', className)}>
       <label htmlFor={id} className="sr-only">
-        Storefront and currency
+        Currency
       </label>
       <select
         id={id}
@@ -29,7 +29,7 @@ export function RegionSelect({ className, variant = 'compact' }: { className?: s
       >
         {REGION_IDS.map((r) => (
           <option key={r} value={r}>
-            {variant === 'compact' ? REGIONS[r].short : REGIONS[r].label}
+            {variant === 'compact' ? `${REGIONS[r].symbol} ${r}` : `${REGIONS[r].symbol} ${r} · ${REGIONS[r].name}`}
           </option>
         ))}
       </select>

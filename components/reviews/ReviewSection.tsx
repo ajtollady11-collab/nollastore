@@ -1,61 +1,83 @@
-import { BadgeCheck } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { BadgeCheck, PenLine } from 'lucide-react';
 import { StarRating } from '@/components/ui/StarRating';
 import { Reveal } from '@/components/ui/Reveal';
-import { reviews as savedReviews, type Review } from '@/data/reviews';
-import { COLOURS, SIZES } from '@/data/product';
+import { Button } from '@/components/ui/Button';
+import { hasOnlyPlaceholders, reviewSettings, visibleReviews, type Review } from '@/data/reviews';
+import { getColour, getSize } from '@/data/product';
 
 /**
- * Customer reviews. Renders nothing until genuine reviews exist in data/reviews.ts
- * (or are passed in from a review platform), so the page never shows invented proof.
+ * "What people are saying": summary row, a grid of review cards,
+ * "Show more" and "Write a review". Placeholder reviews are clearly labelled.
  */
-export function ReviewSection({ reviews = savedReviews, limit = 6 }: { reviews?: Review[]; limit?: number }) {
-  const list = reviews.slice(0, limit);
+export function ReviewSection({ reviews }: { reviews?: Review[] }) {
+  const list = visibleReviews(reviews);
+  const [shown, setShown] = useState(reviewSettings.initial);
   if (list.length === 0) return null;
 
-  const average = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+  const samples = hasOnlyPlaceholders(list);
+  const average = reviewSettings.average ?? list.reduce((s, r) => s + r.rating, 0) / list.length;
 
   return (
     <section id="reviews" aria-labelledby="reviews-title" className="scroll-mt-20 border-t border-charcoal/10 py-20 sm:py-28">
       <div className="container-soft">
-        <Reveal className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <div>
-            <p className="eyebrow">Reviews</p>
-            <h2 id="reviews-title" className="headline mt-4">
-              In their words.
-            </h2>
-          </div>
-          <div className="flex items-center gap-3 text-[0.9rem] text-charcoal/65">
-            <StarRating rating={average} />
-            <span>
-              {average.toFixed(1)} from {reviews.length} review{reviews.length === 1 ? '' : 's'}
-            </span>
-          </div>
+        <Reveal>
+          <p className="eyebrow">Reviews</p>
+          <h2 id="reviews-title" className="headline mt-4">
+            What people are saying
+          </h2>
         </Reveal>
 
-        <ul className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map((r, i) => (
-            <Reveal as="li" key={r.id} delay={(i % 3) * 80} className="border-t border-charcoal/15 pt-6">
-              <figure>
-                <StarRating rating={r.rating} size={13} />
-                <blockquote className="mt-4 font-serif text-[1.3rem] font-light leading-[1.4] tracking-[-0.01em] text-charcoal">“{r.text}”</blockquote>
-                <figcaption className="mt-5 text-[0.85rem] text-charcoal/60">
-                  <span className="font-medium text-charcoal">{r.name}</span>
-                  {r.location && <span>, {r.location}</span>}
-                  {(r.colour || r.size) && (
-                    <span className="mt-1 block text-charcoal/50">
-                      {[COLOURS.find((c) => c.id === r.colour)?.label, SIZES.find((s) => s.id === r.size)?.label].filter(Boolean).join(' · ')}
-                    </span>
-                  )}
+        <div className="mt-10 flex flex-col gap-5 border-y border-charcoal/15 py-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <StarRating rating={average} size={18} className="text-charcoal" />
+            <p className="text-[0.95rem] text-charcoal/70">
+              {samples
+                ? 'Sample reviews: our first customer reviews will appear here soon.'
+                : `Based on ${reviewSettings.count ?? list.length} customer review${list.length === 1 && !reviewSettings.count ? '' : 's'}`}
+            </p>
+          </div>
+          <Button href={reviewSettings.writeReviewHref} variant="secondary" size="md" className="self-start sm:self-auto">
+            <PenLine className="h-4 w-4" strokeWidth={1.6} aria-hidden />
+            Write a review
+          </Button>
+        </div>
+
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {list.slice(0, shown).map((r, i) => {
+            const variant = [getColour(r.colour ?? '')?.label, getSize(r.size ?? '')?.label].filter(Boolean).join(' · ');
+            return (
+              <Reveal as="li" key={r.id} delay={(i % 3) * 70} className="flex flex-col rounded-soft bg-oat-soft p-6 sm:p-7">
+                <div className="flex items-center justify-between gap-3">
+                  <StarRating rating={r.rating} size={14} className="text-charcoal" />
+                  {r.placeholder && <span className="text-[0.68rem] uppercase tracking-[0.12em] text-charcoal/45">Sample review</span>}
+                </div>
+                <h3 className="mt-4 text-[1.05rem] font-medium leading-snug text-charcoal">{r.title}</h3>
+                <p className="mt-2 flex-1 text-[0.95rem] leading-relaxed text-charcoal/65">{r.text}</p>
+                <div className="mt-6 text-[0.88rem]">
+                  <p className="font-medium text-charcoal">{r.name}</p>
+                  {r.location && <p className="mt-0.5 text-charcoal/50">{r.location}</p>}
+                  {variant && <p className="mt-0.5 text-charcoal/50">{variant}</p>}
                   {r.verified && (
-                    <span className="mt-2 inline-flex items-center gap-1 text-mocha">
+                    <p className="mt-2 inline-flex items-center gap-1 text-mocha">
                       <BadgeCheck className="h-3.5 w-3.5" aria-hidden /> Verified purchase
-                    </span>
+                    </p>
                   )}
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
+                </div>
+              </Reveal>
+            );
+          })}
         </ul>
+
+        {shown < list.length && (
+          <div className="mt-10 flex justify-center">
+            <Button variant="secondary" size="lg" onClick={() => setShown((n) => n + 6)}>
+              Show more reviews
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

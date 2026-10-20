@@ -98,3 +98,45 @@
     transition: opacity 0.2s ease;
   }
 }
+
+@layer components {
+  /* Announcement marquee: slow, linear, seamless (-50% = one identical half) */
+  .marquee-track {
+    animation: marquee 60s linear infinite;
+    will-change: transform;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  /* Soft pulse for the live-activity dot */
+  .pulse-dot {
+    animation: pulse-dot 2s ease-out infinite;
+  }
+  @keyframes pulse-dot {
+    0% {
+      box-shadow: 0 0 0 0 rgba(118, 95, 80, 0.45);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(118, 95, 80, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(118, 95, 80, 0);
+    }
+  }
+}

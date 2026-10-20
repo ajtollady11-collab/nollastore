@@ -1,29 +1,29 @@
-'use client';
+import { announcementItems } from '@/data/site';
 
-import { Fragment } from 'react';
-import { useRegion } from '@/components/store/RegionProvider';
-import { announcement } from '@/data/site';
+/**
+ * Sliding announcement bar. The track holds two identical halves and slides
+ * exactly -50%, so the loop is seamless. Pure CSS (GPU transform), pauses on
+ * hover with a mouse, and stands still for people who prefer reduced motion.
+ * Screen readers hear the messages once, not on a loop.
+ */
+const REPEATS_PER_HALF = 3;
 
-/** One quiet line. Phones show the first message only, so it never wraps. */
 export function AnnouncementBar() {
-  const { region } = useRegion();
-  const messages = [...announcement.everywhere, ...announcement[region]];
+  const half = Array.from({ length: REPEATS_PER_HALF }, () => announcementItems).flat();
   return (
-    <div className="bg-espresso text-ivory" role="region" aria-label="Announcements">
-      <div className="container-soft flex h-9 items-center justify-center text-center text-[0.75rem] tracking-[0.02em] sm:text-[0.78rem]">
-        <p className="truncate sm:hidden">{messages[0]}</p>
-        <p className="hidden items-center gap-4 sm:flex">
-          {messages.map((m, i) => (
-            <Fragment key={m}>
-              {i > 0 && (
-                <span className="text-ivory/35" aria-hidden>
-                  ·
-                </span>
-              )}
-              <span className={i > 0 ? 'text-ivory/75' : undefined}>{m}</span>
-            </Fragment>
-          ))}
-        </p>
+    <div className="relative overflow-hidden bg-espresso text-ivory" role="region" aria-label="Announcements">
+      <p className="sr-only">{announcementItems.join('. ')}.</p>
+      <div className="marquee-track flex w-max" aria-hidden>
+        {[0, 1].map((copy) => (
+          <ul key={copy} className="flex shrink-0 items-center">
+            {half.map((item, i) => (
+              <li key={`${copy}-${i}`} className="flex h-9 items-center whitespace-nowrap px-6 text-[0.72rem] tracking-[0.04em] sm:px-8 sm:text-[0.76rem]">
+                <span>{item}</span>
+                <span className="ml-12 text-ivory/35 sm:ml-16">✦</span>
+              </li>
+            ))}
+          </ul>
+        ))}
       </div>
     </div>
   );

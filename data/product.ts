@@ -1,4 +1,4 @@
-import type { RegionId } from './regions';
+import { FALLBACK_RATES, REGIONS, type RegionId } from './regions';
 
 /**
  * ─────────────────────────────────────────────────────────────
@@ -65,8 +65,9 @@ export const COLOURS: Colour[] = [
 ];
 
 /* ───────────────────────────── SIZES & PRICES ─────────────────────────────
- * `prices` are the selling prices per storefront. US prices are deliberate
- * retail prices, NOT currency conversions: never calculate one from the other.
+ * `prices` are our own price lists, in pence / cents. The US prices are deliberate
+ * retail prices, NOT conversions: never calculate one from the other.
+ * Every other currency on the site is converted from the GBP price for display.
  *
  * `referencePrices` are the struck-through comparison prices shown next to the
  * selling price while PROMOTION.enabled is true. Leave a region `null` to show no
@@ -82,8 +83,9 @@ export type Size = {
   label: string;
   widthCm: number;
   lengthCm: number;
-  prices: Record<RegionId, number>;
-  referencePrices: Record<RegionId, number | null>;
+  prices: { GBP: number; USD: number };
+  /** Converted currencies follow the GBP reference price */
+  referencePrices: { GBP: number | null; USD: number | null };
   /** Small label on the size option */
   badge?: string;
   /** Plain-language guidance for the size guide (no bed-fit promises) */
@@ -100,8 +102,8 @@ export const SIZES: Size[] = [
     label: '100 × 150 cm',
     widthCm: 100,
     lengthCm: 150,
-    prices: { uk: 4999, us: 7499 },
-    referencePrices: { uk: null, us: null },
+    prices: { GBP: 4999, USD: 7499 },
+    referencePrices: { GBP: null, USD: null },
     guide: 'A smaller throw. Right for one person on the sofa, an armchair or the end of the bed.',
     weight: 'about 1.1 kg',
   },
@@ -110,8 +112,8 @@ export const SIZES: Size[] = [
     label: '150 × 200 cm',
     widthCm: 150,
     lengthCm: 200,
-    prices: { uk: 7999, us: 11499 },
-    referencePrices: { uk: null, us: null },
+    prices: { GBP: 7999, USD: 11499 },
+    referencePrices: { GBP: null, USD: null },
     guide: 'Room to stretch out under, or to share with someone on the sofa. More coverage across a bed.',
   },
   {
@@ -119,9 +121,9 @@ export const SIZES: Size[] = [
     label: '200 × 230 cm',
     widthCm: 200,
     lengthCm: 230,
-    prices: { uk: 8999, us: 12499 },
+    prices: { GBP: 8999, USD: 12499 },
     // UK reference price as briefed. US: set a figure here only if you have one to stand behind.
-    referencePrices: { uk: 11999, us: null },
+    referencePrices: { GBP: 11999, USD: null },
     badge: 'Our largest',
     guide: 'Our biggest. Enough to share, to wrap right around you, or to spread generously across a bed.',
     weight: 'about 2.8 kg',
@@ -192,15 +194,28 @@ export type PriceInfo = {
   reference: number | null;
 };
 
-export function priceFor(sizeId: SizeId, region: RegionId): PriceInfo {
-  const size = getSize(sizeId) ?? SIZES[SIZES.length - 1];
-  const ref = PROMOTION.enabled ? size.referencePrices[region] : null;
-  return { price: size.prices[region], reference: ref && ref > size.prices[region] ? ref : null };
+export type Rates = Partial<Record<RegionId, number>>;
+
+/** Convert a GBP amount (pence) into another currency's hundredths, rounded sensibly */
+export function convertFromGBP(pence: number, to: RegionId, rates: Rates = FALLBACK_RATES): number {
+  if (to === 'GBP') return pence;
+  const rate = rates[to] ?? FALLBACK_RATES[to];
+  const raw = pence * rate;
+  return REGIONS[to].zeroDecimal ? Math.round(raw / 100) * 100 : Math.round(raw);
 }
 
-export function lowestPrice(region: RegionId): number {
-  return Math.min(...SIZES.map((s) => s.prices[region]));
+/** Price for a size in any currency. GBP and USD use their own lists; the rest convert from GBP. */
+export function priceFor(sizeId: SizeId, region: RegionId, rates?: Rates): PriceInfo {
+  const size = getSize(sizeId) ?? SIZES[SIZES.length - 1];
+  const fixed = region === 'GBP' || region === 'USD';
+  const price = fixed ? size.prices[region] : convertFromGBP(size.prices.GBP, region, rates);
+  const refBase = fixed ? size.referencePrices[region] : size.referencePrices.GBP;
+  const ref = PROMOTION.enabled && refBase ? (fixed ? refBase : convertFromGBP(refBase, region, rates)) : null;
+  return { price, reference: ref && ref > price ? ref : null };
 }
+
+/** The amount actually charged at checkout (always GBP today) */
+export const chargedPriceFor = (sizeId: SizeId) => priceFor(sizeId, 'GBP').price;
 
 /** "White / 200 × 230 cm" */
 export function describeSelection(sel: Selection): string {

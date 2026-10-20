@@ -2,7 +2,7 @@
 
 *make staying in feel better.*
 
-A one-product storefront for the **Nolla Nuv™ Velvet Blanket**: 6 colours × 3 sizes, UK and US pricing, and a free Nimbus™ cloud pillow with every blanket.
+A one-product storefront for the **Nolla Nuv™ Velvet Blanket**: 6 colours × 3 sizes, 30 display currencies, and a free Nimbus™ cloud pillow with every blanket.
 Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS. Square checkout (UK, GBP) is built in.
 
 ## Run it
@@ -20,7 +20,7 @@ Deploy by pushing to the GitHub repo connected to Vercel. Environment variables 
 
 | Route | What it is |
 | --- | --- |
-| `/` | The whole store: hero → purchase section (`#shop`) → free gift (`#gift`) → staying in → benefits → texture (`#fabric`) → size guide (`#size-guide`) → our story (`#story`) → reviews (hidden until genuine) → FAQ (`#faq`) → final CTA |
+| `/` | The whole store: hero → purchase section (`#shop`) → free gift (`#gift`) → real-life videos → reviews (`#reviews`) → staying in → benefits → texture (`#fabric`) → size guide (`#size-guide`) → our story (`#story`) → FAQ (`#faq`) → final CTA |
 | `/checkout` | Delivery details, then Square payment |
 | `/checkout/success` | Thank-you page (Square redirects here) |
 | `/faq`, `/contact`, `/shipping-returns`, `/privacy`, `/terms` | Supporting pages |
@@ -30,14 +30,18 @@ Deploy by pushing to the GitHub repo connected to Vercel. Environment variables 
 
 | To change… | Edit |
 | --- | --- |
-| **Prices** (UK and US, per size) | `data/product.ts` → `SIZES[].prices` (pence / cents) |
+| **Prices** (GBP and USD, per size) | `data/product.ts` → `SIZES[].prices` (pence / cents). Other currencies convert from GBP |
 | **Reference ("regular") prices** | `data/product.ts` → `SIZES[].referencePrices` (per storefront; `null` = none shown) |
 | **Limited-time offer on/off, wording** | `data/product.ts` → `PROMOTION` |
 | Colours, swatches, which photos each colour uses | `data/product.ts` → `COLOURS` |
 | Default colour/size shown first | `data/product.ts` → `DEFAULT_SELECTION` |
 | **Free pillow rule** (one per blanket, or one per order) | `data/product.ts` → `GIFT.mode` |
-| Storefronts: currency, delivery wording, whether checkout is open | `data/regions.ts` |
-| Announcement bar | `data/site.ts` → `announcement` |
+| Currencies, fallback exchange rates, whether checkout is open per currency | `data/regions.ts` |
+| Sliding announcement bar | `data/site.ts` → `announcementItems` |
+| **Delivery time** (4–10 working days) and delivery wording | `data/site.ts` → `DELIVERY_ESTIMATE`, `deliveryCopy`, `shippingRegions` |
+| Real-life videos | `public/videos` + `data/content.ts` → `ugcVideos` |
+| Reviews (placeholders now) | `data/reviews.ts` → `reviews`, `reviewSettings` |
+| "People checking this out" line | `data/liveActivity.ts` (off by default) |
 | Delivery methods charged at checkout (GBP) | `data/site.ts` → `shippingRegions` |
 | Section copy (hero, gift, moments, benefits, story, final CTA, product details) | `data/content.ts` |
 | FAQ | `data/faqs.ts` |
@@ -49,7 +53,7 @@ Deploy by pushing to the GitHub repo connected to Vercel. Environment variables 
 ## How it works
 
 - **One product, variants not pages.** Colour and size are options of a single product. Changing size keeps the colour and vice versa (`components/product/SelectionProvider.tsx`), and the purchase panel, sticky bar and texture section all share that choice.
-- **Regional pricing.** `components/store/RegionProvider.tsx` holds the storefront (UK £ / US $), remembers it on the device, and accepts `?region=us` or `?region=uk` in a link (useful for ads). Every price is read from `data/product.ts` for the current storefront. The bag stores colour, size and quantity only, never a price, so switching storefront re-prices everything at once. Prices fade in once the saved storefront has loaded, so US visitors don't see £ flash first.
+- **Currencies.** `components/store/RegionProvider.tsx` holds the shopper's currency (30 options, matching the header selector), remembers it on the device and accepts `?currency=EUR` in a link. GBP and USD use your own price lists; every other currency is the GBP price converted with live rates from open.er-api.com (cached 12 hours, fallback table in `data/regions.ts`). Checkout always charges GBP, and converted currencies say so beside the price, in the bag and at checkout. The bag stores colour, size and quantity only, never a price, so switching currency re-prices everything.
 - **The bag** (`components/cart/*`, `lib/cart.ts`) persists to `localStorage`, syncs across tabs, and supports quantity changes and removal. The free pillow is *derived* from the blankets: it can't be added, removed, edited or charged.
 - **Checkout** (`app/api/checkout/route.ts`, `lib/order.ts`, `lib/square.ts`): the server re-prices the bag from `data/product.ts`, rejects anything it doesn't recognise, adds the free pillow line(s) at £0, and creates a Square payment page. Line names include the supplier's colour name (e.g. "Pink (Powder Pink)") so orders are unambiguous to fulfil.
 
@@ -58,20 +62,14 @@ Deploy by pushing to the GitHub repo connected to Vercel. Environment variables 
 - **Reference price.** £119.99 is shown struck through next to £89.99 on the 200 × 230 cm size, as briefed. UK rules (CMA guidance, DMCC Act 2024) expect a "regular price" to be one the product was genuinely sold at for a meaningful period. Keep it only if that's true; otherwise set `referencePrices.uk` to `null` or change `PROMOTION.referenceLabel`.
 - **Black.** The "Black" option uses the photos previously labelled Charcoal (it photographs as a deep charcoal). Check against a sample.
 - **Care instructions** are a placeholder (`data/content.ts` → `care`, `data/faqs.ts` → `care`). Add the supplier's confirmed instructions.
-- **International delivery times** aren't confirmed (`data/site.ts`, marked PLACEHOLDER). No US delivery times are promised anywhere.
-- **Reviews.** The section is built and hidden. Add genuine reviews to `data/reviews.ts`, or pass reviews from a review app to `<ReviewSection reviews={…} />`, and it appears automatically.
+- **Reviews.** The section currently shows six **placeholder** reviews, labelled "Sample review", with no review count. Replace them with genuine reviews (or set `reviewSettings.showPlaceholders = false`) before driving traffic: publishing invented reviews as real is illegal in the UK under the DMCC Act 2024. Set `reviewSettings.count` / `average` once you have real numbers and they appear beside the title.
+- **"People checking this out".** Built and switched off (`data/liveActivity.ts`). Only switch it on with a real figure from your analytics (`source`); invented live counts are a banned misleading practice under the same law.
+- **Videos.** The five "real life" clips are from the old site. Clip 5 says "from amazon" in its caption and clip 1 shows another brand's label; consider replacing them with your own footage.
 - **Logo.** The serif wordmark is the same one the current site uses. To use a logo file, set `site.logo.src`.
 
 ## US checkout: what's needed
 
-The UK storefront takes real payments today. The US storefront shows the correct USD prices everywhere and lets people build a bag, but checkout is closed (`data/regions.ts` → `us.checkout.enabled: false`). The bag and `/checkout` explain this and offer to switch to the UK store, which can deliver to the US in GBP with international delivery.
-
-This is because a Square location charges in its own currency, and the current location is GBP. To take USD payments:
-
-1. Set up a checkout that can charge in USD: a Square account/location in the US, or a multi-currency provider (e.g. Stripe or Shopify Markets).
-2. Configure US delivery methods (priced in USD) alongside `shippingRegions` and pass the right ones by storefront in `lib/order.ts` (it currently refuses non-GBP orders on purpose).
-3. In `lib/square.ts`, choose the location ID by `order.currency` (money amounts already use `order.currency`).
-4. Set `REGIONS.us.checkout.enabled = true`.
+Every currency except USD can check out today (charged in GBP). USD has its own retail prices ($124.99 etc.), which can't honestly be charged as a GBP conversion, so USD checkout is closed (`data/regions.ts` → `USD.checkout.enabled: false`) and the bag offers to switch to pounds. To open it: connect a USD-capable checkout (a US Square location, or Stripe/Shopify Markets), choose the Square location by currency in `lib/square.ts`, price USD orders from `SIZES[].prices.USD` in `lib/order.ts`, then set `enabled: true`.
 
 ## Free gift: what's automatic, and what isn't
 

@@ -1,5 +1,6 @@
 import { Hero } from '@/components/home/Hero';
 import { GiftSection } from '@/components/home/GiftSection';
+import { RealLife } from '@/components/home/RealLife';
 import { Moments } from '@/components/home/Moments';
 import { Benefits } from '@/components/home/Benefits';
 import { FabricSection } from '@/components/home/FabricSection';
@@ -16,8 +17,8 @@ import { site } from '@/data/site';
 
 /**
  * The homepage is the product page. In order:
- * hero → buy → the free gift → staying in → why it belongs → texture →
- * size guide → our story → reviews (only when genuine) → FAQ → final call.
+ * hero → buy → the free gift → real-life videos → reviews → staying in → why it belongs → texture →
+ * size guide → our story → FAQ → final call.
  */
 export default function HomePage() {
   return (
@@ -25,12 +26,13 @@ export default function HomePage() {
       <Hero />
       <PurchaseSection />
       <GiftSection />
+      <RealLife />
+      <ReviewSection />
       <Moments />
       <Benefits />
       <FabricSection />
       <SizeGuideSection />
       <Story />
-      <ReviewSection />
       <FAQSection />
       <FinalCta />
       <StickyPurchaseBar />
@@ -52,7 +54,7 @@ function ProductJsonLd() {
       COLOURS.map((c) => ({
         '@type': 'Offer',
         name: `${c.label} / ${s.label}`,
-        price: (s.prices.uk / 100).toFixed(2),
+        price: (s.prices.GBP / 100).toFixed(2),
         priceCurrency: 'GBP',
         availability: 'https://schema.org/InStock',
         url: `${site.url}/#shop`,
