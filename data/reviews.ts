@@ -30,10 +30,10 @@ export type Review = {
 /* ───────────── REVIEW SETTINGS ───────────── */
 export const reviewSettings = {
   // Your REAL total number of reviews, in quotes, e.g. '148' or '1,300+'
-  count: null as string | null,
+  count: '1300+' as string | null,
 
   // Your REAL average star rating, e.g. 4.8
-  average: null as number | null,
+  average: 4.9 as number | null,
 
   // Leave this as true. Samples only show while they're still in the list below.
   showPlaceholders: true,
