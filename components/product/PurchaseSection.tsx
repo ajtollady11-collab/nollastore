@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Gift, Lock, RotateCcw, Truck } from 'lucide-react';
 import { ProductGallery } from './ProductGallery';
 import { ColourSelector, SizeSelector } from './VariantSelectors';
@@ -27,7 +28,14 @@ export const PRIMARY_ADD_ID = 'primary-add-to-bag';
  */
 export function PurchaseSection() {
   const { selection, setColour, setSize } = useSelection();
-  const { add } = useCart();
+  const { add, open } = useCart();
+  const router = useRouter();
+  const buyNow = () => {
+    // Straight to checkout; if this currency can't check out yet, show the bag (it explains why)
+    add(selection, { openCart: false });
+    if (info.checkout.enabled) router.push('/checkout');
+    else open();
+  };
   const { region, info, money, price, converted, rates, ready } = useRegion();
   const [guideOpen, setGuideOpen] = useState(false);
   const current = price(selection.size).price;
@@ -102,6 +110,13 @@ export function PurchaseSection() {
             <span className="price-wait tabular-nums" data-ready={ready}>
               {money(current)}
             </span>
+          </button>
+          <button
+            type="button"
+            onClick={buyNow}
+            className="mt-3 flex h-14 w-full items-center justify-center rounded-full border border-charcoal bg-transparent px-6 text-[1rem] font-medium text-charcoal transition-[background-color,color,transform] duration-300 ease-soft hover:bg-charcoal hover:text-ivory active:scale-[0.99]"
+          >
+            Buy it now
           </button>
           <p className="mt-3 text-center text-[0.84rem] text-charcoal/70">
             Blanket <span className="text-taupe">+</span> free cloud pillow <span className="text-taupe">+</span> free UK delivery
