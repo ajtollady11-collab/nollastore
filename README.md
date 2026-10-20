@@ -38,7 +38,7 @@ Deploy by pushing to the GitHub repo connected to Vercel. Environment variables 
 | **Free pillow rule** (one per blanket, or one per order) | `data/product.ts` → `GIFT.mode` |
 | Currencies, fallback exchange rates, whether checkout is open per currency | `data/regions.ts` |
 | Sliding announcement bar | `data/site.ts` → `announcementItems` |
-| **Delivery time** (4–10 working days) and delivery wording | `data/site.ts` → `DELIVERY_ESTIMATE`, `deliveryCopy`, `shippingRegions` |
+| **Delivery** (free worldwide, 4–10 working days) and delivery wording | `data/site.ts` → `DELIVERY_ESTIMATE`, `deliveryCopy`, `shippingRegions` |
 | Real-life videos | `public/videos` + `data/content.ts` → `ugcVideos` |
 | Reviews (placeholders now) | `data/reviews.ts` → `reviews`, `reviewSettings` |
 | "People checking this out" line | `data/liveActivity.ts` (off by default) |

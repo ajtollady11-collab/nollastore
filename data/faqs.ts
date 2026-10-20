@@ -40,13 +40,13 @@ export const faqs: FAQItem[] = [
     id: 'delivery',
     question: 'How does delivery work?',
     answer:
-      'UK delivery is free. We ship worldwide: outside the UK you can choose standard delivery (£6.71) or express insured shipping (£11.13) at checkout. Orders usually arrive in 4–10 working days. Delivery times are estimates rather than guarantees, and we’ll email your tracking details as soon as your order ships.',
+      'Shipping is free worldwide, with tracking. Outside the UK you can also choose optional express insured shipping (£11.13) at checkout. Orders usually arrive in 4–10 working days. Delivery times are estimates rather than guarantees, and we’ll email your tracking details as soon as your order ships.',
   },
   {
     id: 'currency',
     question: 'Which currency will I pay in?',
     answer:
-      'You can browse in your own currency using the selector at the top of the page. Orders are charged in pounds (GBP), and if your card is in another currency your card provider converts it. Prices shown in currencies other than pounds and US dollars are converted at current exchange rates, so they’re approximate. Orders delivered to the US are charged at our US prices (in pounds), which are slightly higher because US delivery costs us more.',
+      'You can browse in your own currency using the selector at the top of the page. Orders are charged in pounds (GBP), and if your card is in another currency your card provider converts it. Prices shown in currencies other than pounds and US dollars are converted at current exchange rates, so they’re approximate. Orders delivered to the US are charged at our US prices (in pounds), which are slightly higher because US shipping costs us more.',
   },
   {
     id: 'returns',

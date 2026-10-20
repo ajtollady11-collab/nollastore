@@ -169,7 +169,7 @@ export const termsAndConditions: LegalPageContent = {
     {
       heading: '7. Delivery',
       p: [
-        'UK delivery is free. International delivery is charged at checkout. Orders usually arrive in 4–10 working days. Delivery times are estimates, not guarantees.',
+        'Standard shipping is free to every country we deliver to. Outside the UK you can choose optional express insured shipping at checkout for an extra charge. Orders usually arrive in 4–10 working days. Delivery times are estimates, not guarantees.',
         'Orders containing more than one product may arrive in separate packages, as products may be fulfilled from different locations or become ready for dispatch at different times. If your order is split, you may receive separate tracking information for each package.',
         'Please see our Shipping & Returns page for more information.',
       ],
@@ -223,8 +223,8 @@ export const shippingReturns: LegalPageContent = {
     {
       heading: 'Delivery',
       list: [
-        'UK: free delivery.',
-        'Outside the UK: standard delivery £6.71, or express insured shipping £11.13.',
+        'Free tracked shipping worldwide.',
+        'Outside the UK, optional express insured shipping is available at checkout for £11.13.',
         'Orders usually arrive in 4–10 working days.',
       ],
       after: [

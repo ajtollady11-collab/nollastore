@@ -1,4 +1,4 @@
-/** Countries we deliver to (ISO codes). GB = free UK delivery; everything else = international rates. */
+/** Countries we deliver to (ISO codes). Shipping is free to all of them. */
 export const countries: { code: string; name: string }[] = [
   { code: 'GB', name: 'United Kingdom' },
   { code: 'IE', name: 'Ireland' },

@@ -15,7 +15,7 @@ import { SmartImage } from '@/components/ui/SmartImage';
 import { TM } from '@/components/ui/TM';
 import { Accordion } from '@/components/ui/Accordion';
 import { ReviewSummary } from '@/components/reviews/ReviewSummary';
-import { GIFT, PRODUCT, chargedPriceFor, convertFromGBP } from '@/data/product';
+import { GIFT, PRODUCT, chargedPriceFor } from '@/data/product';
 import { productDetails } from '@/data/content';
 import { deliveryCopy } from '@/data/site';
 import { formatPrice } from '@/lib/format';
@@ -36,10 +36,9 @@ export function PurchaseSection() {
     if (info.checkout.enabled) router.push('/checkout');
     else open();
   };
-  const { region, info, money, price, converted, rates, ready } = useRegion();
+  const { region, info, money, price, converted, ready } = useRegion();
   const [guideOpen, setGuideOpen] = useState(false);
   const current = price(selection.size).price;
-  const intl = region === 'GBP' || region === 'USD' ? formatPrice(deliveryCopy.intlFrom) : money(convertFromGBP(deliveryCopy.intlFrom, region, rates));
 
   return (
     <section id="shop" aria-labelledby="product-title" className="scroll-mt-20 pb-20 pt-10 sm:pt-16 lg:pb-28 lg:pt-20">
@@ -121,11 +120,11 @@ export function PurchaseSection() {
             Buy it now
           </button>
           <p className="mt-3 text-center text-[0.84rem] text-charcoal/70">
-            Blanket <span className="text-taupe">+</span> free cloud pillow <span className="text-taupe">+</span> free UK delivery
+            Blanket <span className="text-taupe">+</span> free cloud pillow <span className="text-taupe">+</span> free worldwide shipping
           </p>
 
           <ul className="mt-7 divide-y divide-charcoal/10 border-y border-charcoal/10 text-[0.88rem]">
-            <ServiceRow icon={Truck} title={`${deliveryCopy.short} · ${deliveryCopy.estimate}`} body={deliveryCopy.detail.replace('{intl}', intl)} />
+            <ServiceRow icon={Truck} title={`${deliveryCopy.short} · ${deliveryCopy.estimate}`} body={deliveryCopy.detail} />
             <ServiceRow icon={RotateCcw} title={deliveryCopy.returns} body={deliveryCopy.returnsDetail} />
             {info.checkout.enabled ? (
               <ServiceRow icon={Lock} title="Secure checkout" body="Pay with card, Apple Pay or Google Pay through Square. Orders are charged in GBP." />
