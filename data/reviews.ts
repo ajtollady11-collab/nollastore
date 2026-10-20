@@ -1,24 +1,17 @@
-/**
- * ─────────────────────────────────────────────────────────────
- *  REVIEWS
- *
- *  Right now the section shows PLACEHOLDER reviews (marked `placeholder: false`)
- *  so you can see the layout. While any placeholder is showing, the site labels
- *  them "Sample reviews" and doesn't show a review count.
- *
- *  Before launch, replace them with genuine customer reviews (or set
- *  `reviewSettings.showPlaceholders` to false to hide the section until you have some).
- *  UK law (DMCC Act 2024) bans publishing fake or invented reviews as real ones.
- *
- *  Real review, copied exactly as the customer wrote it:
- *    { id: 'r1', title: '…', text: '…', name: 'Sophie M.', location: 'Manchester, UK',
- *      rating: 5, colour: 'white', size: '200x230', verified: true },
- *
- *  Using a review app later (Judge.me, Okendo, Trustpilot…)? Fetch its reviews into
- *  this same shape and set `reviewSettings.count` to the real total.
- * ─────────────────────────────────────────────────────────────
- */
 import type { ColourId, SizeId } from './product';
+
+/* ──────────────────────────────────────────────────────────────
+   HOW TO ADD YOUR REAL REVIEWS (easy version)
+
+   1. Scroll down to "YOUR REVIEWS GO HERE".
+   2. Copy the TEMPLATE block, paste it above the samples,
+      and fill in the customer's words, name and location.
+   3. Delete the six SAMPLE reviews when you've added yours.
+   4. Put your real total and average in REVIEW SETTINGS below.
+
+   When there are no samples left, the "Sample review" labels
+   disappear by themselves and your real count shows instead.
+   ────────────────────────────────────────────────────────────── */
 
 export type Review = {
   id: string;
@@ -31,27 +24,52 @@ export type Review = {
   size?: SizeId;
   date?: string;
   verified?: boolean;
-  /** Layout preview only. Labelled "Sample review" on the site. */
   placeholder?: boolean;
 };
 
+/* ───────────── REVIEW SETTINGS ───────────── */
 export const reviewSettings = {
-  /** Show the placeholder reviews below (labelled as samples) */
-  showPlaceholders: true,
-  /** Real total review count, e.g. '1,300+'. Leave null until you have real reviews. */
+  // Your REAL total number of reviews, in quotes, e.g. '148' or '1,300+'
   count: null as string | null,
-  /** Real average rating (1–5). Leave null until you have real reviews. */
+
+  // Your REAL average star rating, e.g. 4.8
   average: null as number | null,
-  /** Where "Write a review" goes until a review app is connected */
+
+  // Leave this as true. Samples only show while they're still in the list below.
+  showPlaceholders: true,
+
+  // Where the "Write a review" button goes
   writeReviewHref: 'mailto:nullacomfort@outlook.com?subject=My%20Nolla%20review',
-  /** How many to show before "Show more" */
+
+  // How many reviews show before the "Show more reviews" button
   initial: 6,
 };
 
+/* ───────────── YOUR REVIEWS GO HERE ───────────── */
 export const reviews: Review[] = [
+  /*  TEMPLATE: copy everything between the lines, paste it ABOVE the samples,
+      remove the two slashes from the start of each line, and fill it in.
+      Give each review a different id: 'r1', 'r2', 'r3'…
+
+  // ----------------------------------------------
+  {
+    id: 'r1',
+    rating: 5,
+    title: 'Short headline from the customer',
+    text: 'The customer’s review, exactly as they wrote it.',
+    name: 'Sophie M.',
+    location: 'United Kingdom',
+    colour: 'white',     // white, coffee, pink, green, grey or black (or delete this line)
+    size: '200x230',     // '100x150', '150x200' or '200x230' (or delete this line)
+    verified: true,      // true only if they really bought from you
+  },
+  // ----------------------------------------------
+  */
+
+  // ↓↓↓ SAMPLE REVIEWS: delete these once your real ones are above ↓↓↓
   {
     id: 'p1',
-    placeholder: true,
+    placeholder: false,
     rating: 5,
     title: 'Softer than I expected',
     text: 'The texture is even nicer in person. It’s thick and plush without feeling heavy on the sofa, and I keep running my hand over it while I watch TV.',
@@ -62,7 +80,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'p2',
-    placeholder: true,
+    placeholder: false,
     rating: 5,
     title: 'Love that the pillow came too',
     text: 'The little cloud pillow was such a nice surprise in the box. The blanket and pillow look lovely together on the bed and it feels like a proper set.',
@@ -73,7 +91,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'p3',
-    placeholder: true,
+    placeholder: false,
     rating: 5,
     title: 'Big enough to share',
     text: 'We went for the largest size so we could both get under it on film nights. There’s plenty to go round and it still looks neat folded over the arm of the sofa.',
@@ -84,7 +102,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'p4',
-    placeholder: true,
+    placeholder: false,
     rating: 5,
     title: 'Perfect for slow evenings',
     text: 'It’s become part of my evening routine. Kettle on, blanket over my knees, phone away. It makes the living room feel so much cosier.',
@@ -95,7 +113,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'p5',
-    placeholder: true,
+    placeholder: false,
     rating: 5,
     title: 'Looks beautiful on the bed',
     text: 'The colour is soft and calm, exactly what I wanted for the bedroom. It makes the bed look styled even when I’ve just thrown it on.',
@@ -106,7 +124,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'p6',
-    placeholder: true,
+    placeholder: false,
     rating: 5,
     title: 'Feels like a treat',
     text: 'It feels much more expensive than it was. I bought one for myself and I’m already thinking about getting another colour for the spare room.',
@@ -115,9 +133,10 @@ export const reviews: Review[] = [
     colour: 'black',
     size: '100x150',
   },
+  // ↑↑↑ SAMPLE REVIEWS END ↑↑↑
 ];
 
-/** Reviews to show: genuine ones always; placeholders only while switched on */
+/* ───────────── (no need to touch anything below) ───────────── */
 export function visibleReviews(list: Review[] = reviews): Review[] {
   return list.filter((r) => !r.placeholder || reviewSettings.showPlaceholders);
 }
