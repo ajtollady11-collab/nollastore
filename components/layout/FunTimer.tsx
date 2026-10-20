@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
  */
 export const funTimer = {
   enabled: true,
-  label: 'This timer is just here for a bit of fun',
+  label: 'Time Until Sale Ends',
   timeZone: 'Europe/London',
 };
 
