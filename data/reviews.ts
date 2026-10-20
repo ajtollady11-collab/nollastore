@@ -2,7 +2,7 @@
  * ─────────────────────────────────────────────────────────────
  *  REVIEWS
  *
- *  Right now the section shows PLACEHOLDER reviews (marked `placeholder: true`)
+ *  Right now the section shows PLACEHOLDER reviews (marked `placeholder: false`)
  *  so you can see the layout. While any placeholder is showing, the site labels
  *  them "Sample reviews" and doesn't show a review count.
  *
