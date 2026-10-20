@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { serif, sans } from './fonts';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
+import { FunTimer } from '@/components/layout/FunTimer';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { RegionProvider } from '@/components/store/RegionProvider';
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Skip to content
             </a>
             <AnnouncementBar />
+            <FunTimer />
             <Header />
             <main id="main">{children}</main>
             <Footer />
