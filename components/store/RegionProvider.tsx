@@ -6,7 +6,8 @@ import { priceFor, type PriceInfo, type Rates, type SizeId } from '@/data/produc
 import { formatMoney } from '@/lib/format';
 
 /**
- * The currency the shopper is browsing in. Remembered on this device.
+ * The currency the shopper is browsing in. Picked automatically from their
+ * country (see middleware.ts); once they choose one themselves, that's remembered.
  * A link with ?currency=EUR (or ?region=EUR) sets it, which is handy for ads.
  * Live exchange rates load once and are cached for 12 hours; the fallback
  * table in data/regions.ts is used until then (or if they can't load).
@@ -49,8 +50,11 @@ export function RegionProvider({ children }: { children: React.ReactNode }) {
         initial = legacy;
         window.localStorage.setItem(STORAGE_KEY, legacy);
       } else {
+        // 1. Their own earlier choice  2. Their country (set by middleware.ts)  3. Pounds
         const saved = window.localStorage.getItem(STORAGE_KEY);
+        const geo = document.cookie.match(/(?:^|; )nolla-geo-currency=([A-Z]{3})/)?.[1];
         if (isRegionId(saved)) initial = saved;
+        else if (isRegionId(geo)) initial = geo;
       }
     } catch {
       /* storage unavailable */
