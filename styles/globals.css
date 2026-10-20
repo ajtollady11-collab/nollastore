@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-cream font-sans text-[15px] text-charcoal antialiased sm:text-base;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  /* Fraunces' SOFT axis rounds the terminals: pillowy, but grown-up */
+  .font-serif,
+  h1,
+  h2,
+  h3 {
+    font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  }
+
+  ::selection {
+    background: #e6d9c9;
+    color: #252321;
+  }
+
+  :focus-visible {
+    outline: 2px solid #765f50;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-soft {
+    @apply mx-auto w-full max-w-[1320px] px-4 sm:px-8 lg:px-12;
+  }
+
+  /* Small uppercase label above headings */
+  .eyebrow {
+    @apply font-sans text-eyebrow font-medium uppercase text-mocha;
+  }
+
+  /* Section headline: light serif, never shouty */
+  .headline {
+    @apply font-serif text-[2.1rem] font-light leading-[1.04] tracking-[-0.03em] text-charcoal sm:text-display-sm lg:text-display-md;
+  }
+
+  .prose-soft {
+    @apply text-[0.98rem] leading-[1.7] text-charcoal/70;
+  }
+
+  /* Hairline-underlined text link */
+  .link {
+    @apply underline decoration-charcoal/25 underline-offset-[5px] transition-colors hover:decoration-charcoal;
+  }
+
+  /* Scroll-reveal: visible by default; JS opts below-the-fold content into a fade */
+  .reveal {
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal[data-state='hidden'] {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Prices wait for the saved storefront to load, so US visitors never see £ flash */
+  .price-wait[data-ready='false'] {
+    opacity: 0;
+  }
+  .price-wait {
+    transition: opacity 0.2s ease;
+  }
+}
