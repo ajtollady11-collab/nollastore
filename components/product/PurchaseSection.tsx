@@ -61,9 +61,11 @@ export function PurchaseSection() {
             <Gift className="h-4 w-4" aria-hidden />
             Free cloud pillow included
           </p>
-          {converted && (
+          {region !== 'GBP' && (
             <p className="mt-2 text-[0.8rem] text-charcoal/55">
-              Approximate price in {region}. You’ll be charged {formatPrice(chargedPriceFor(selection.size))} in GBP; your card provider converts it.
+              {converted ? `Approximate price in ${region}. ` : ''}
+              You’ll be charged {formatPrice(chargedPriceFor(selection.size, region === 'USD' ? 'US' : undefined))} in GBP
+              {region === 'USD' ? ' (our US price)' : ''}; your card provider converts it.
             </p>
           )}
 

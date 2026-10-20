@@ -16,7 +16,7 @@ import { cn } from '@/lib/cn';
 /** Slide-in bag. Full height on the right; full width on phones. */
 export function CartDrawer() {
   const { lines, gifts, isOpen, close, subtotal, setQuantity, remove, lastAddedKey } = useCart();
-  const { info, money, setRegion, price, converted } = useRegion();
+  const { region, info, money, setRegion, price, converted } = useRegion();
   const { chargeSubtotal } = useCart();
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -186,7 +186,7 @@ export function CartDrawer() {
                     Checkout
                   </Button>
                   <p className="mt-2.5 text-center text-[0.75rem] text-charcoal/50">Secure payment by Square. Card, Apple Pay and Google Pay.</p>
-                  {converted && (
+                  {(converted || region === 'USD') && (
                     <p className="mt-1 text-center text-[0.75rem] text-charcoal/50">Charged in GBP: {formatPrice(chargeSubtotal)} before any delivery. Your card provider converts it.</p>
                   )}
                 </>

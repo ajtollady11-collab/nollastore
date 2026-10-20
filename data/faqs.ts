@@ -46,7 +46,7 @@ export const faqs: FAQItem[] = [
     id: 'currency',
     question: 'Which currency will I pay in?',
     answer:
-      'You can browse in your own currency using the selector at the top of the page. Orders are charged in pounds (GBP), and if your card is in another currency your card provider converts it. Prices shown in currencies other than pounds and US dollars are converted at current exchange rates, so they’re approximate.',
+      'You can browse in your own currency using the selector at the top of the page. Orders are charged in pounds (GBP), and if your card is in another currency your card provider converts it. Prices shown in currencies other than pounds and US dollars are converted at current exchange rates, so they’re approximate. Orders delivered to the US are charged at our US prices (in pounds), which are slightly higher because US delivery costs us more.',
   },
   {
     id: 'returns',

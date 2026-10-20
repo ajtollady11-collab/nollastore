@@ -1,5 +1,5 @@
 import { countries, UK_CODE } from '@/data/countries';
-import { GIFT, PRODUCT, getColour, getSize, giftQuantity, isValidSelection, priceFor, type Selection } from '@/data/product';
+import { GIFT, PRODUCT, chargedPriceFor, getColour, getSize, giftQuantity, isValidSelection, type Selection } from '@/data/product';
 import { REGIONS, isRegionId, type CurrencyCode, type RegionId } from '@/data/regions';
 import { shippingRegions, type ShippingMethodId } from '@/data/site';
 import { discountCodes } from '@/data/marketing';
@@ -46,7 +46,13 @@ function findShipping(id: string) {
   return null;
 }
 
-export function priceOrder(inputLines: OrderInputLine[], shippingId: string, code: string | null | undefined, regionInput: unknown): OrderResult {
+export function priceOrder(
+  inputLines: OrderInputLine[],
+  shippingId: string,
+  code: string | null | undefined,
+  regionInput: unknown,
+  deliveryCountry?: string,
+): OrderResult {
   // regionInput = the currency the shopper browsed in; everything is charged in GBP
   // Older carts may send 'uk' / 'us'
   const normalised = regionInput === 'uk' ? 'GBP' : regionInput === 'us' ? 'USD' : regionInput;
@@ -72,8 +78,8 @@ export function priceOrder(inputLines: OrderInputLine[], shippingId: string, cod
       // Supplier colour name in brackets when it differs, so the order is unambiguous to fulfil
       variant: `${colour.label}${colour.supplierName !== colour.label ? ` (${colour.supplierName})` : ''} / ${size.label}`,
       quantity: qty,
-      // Checkout always charges the GBP price (converted currencies are display-only)
-      unitPrice: priceFor(size.id, 'GBP').price,
+      // Always charged in GBP: the US price list for US deliveries, the UK price otherwise
+      unitPrice: chargedPriceFor(size.id, deliveryCountry),
     });
   }
 

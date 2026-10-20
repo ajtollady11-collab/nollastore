@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   const delivery = validateDelivery(body.delivery, body.shippingMethod ?? '');
   if (!delivery.ok) return NextResponse.json({ error: delivery.error, field: delivery.field }, { status: 400 });
 
-  const priced = priceOrder(body.lines ?? [], body.shippingMethod ?? '', body.discountCode, body.region);
+  const priced = priceOrder(body.lines ?? [], body.shippingMethod ?? '', body.discountCode, body.region, delivery.delivery.country);
   if (!priced.ok) return NextResponse.json({ error: priced.error }, { status: 400 });
 
   const origin = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || req.nextUrl.origin;

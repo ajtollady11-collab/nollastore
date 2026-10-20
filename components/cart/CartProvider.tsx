@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { describeSelection, type Selection } from '@/data/product';
+import { chargedPriceFor, describeSelection, type Selection } from '@/data/product';
 import { discountCodes } from '@/data/marketing';
 import { shippingRegions, type ShippingMethodId, type ShippingRegion } from '@/data/site';
 import { normaliseCode } from '@/lib/order';
@@ -25,8 +25,11 @@ type CartContextValue = {
   gifts: number;
   /** In the shopper's currency, for display */
   subtotal: number;
-  /** In GBP: what checkout charges */
+  /** In GBP: what checkout charges (US deliveries use the US price list) */
   chargeSubtotal: number;
+  /** Delivery country used for pricing (set by the checkout form) */
+  deliveryCountry: string;
+  setDeliveryCountry: (code: string) => void;
   shippingRegion: ShippingRegion;
   setShippingRegion: (region: ShippingRegion) => void;
   shippingMethod: ShippingMethodId;
@@ -129,7 +132,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const subtotal = cartSubtotal(state.lines, region, rates);
-  const chargeSubtotal = cartSubtotal(state.lines, 'GBP');
+  // Until the checkout form says otherwise, dollar shoppers are assumed to be shipping to the US
+  const [countryChoice, setDeliveryCountry] = useState<string | null>(null);
+  const deliveryCountry = countryChoice ?? (region === 'USD' ? 'US' : 'GB');
+  const chargeSubtotal = state.lines.reduce((sum, l) => sum + chargedPriceFor(l.selection.size, deliveryCountry) * l.quantity, 0);
   const method = shippingRegions[shippingRegion].methods.find((m) => m.id === shippingMethod) ?? shippingRegions[shippingRegion].methods[0];
   const shippingCost = state.lines.length ? method.price : 0;
   const discountAmount = discountCode ? Math.round((chargeSubtotal * discountCodes[discountCode].percent) / 100) : 0;
@@ -152,6 +158,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       gifts: giftCount(state.lines),
       subtotal,
       chargeSubtotal,
+      deliveryCountry,
+      setDeliveryCountry,
       shippingRegion,
       setShippingRegion,
       shippingMethod: method.id,
@@ -173,7 +181,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       lastAddedKey,
       announcement,
     }),
-    [state.lines, subtotal, chargeSubtotal, shippingRegion, setShippingRegion, method.id, shippingCost, discountCode, applyDiscountCode, removeDiscountCode, discountAmount, clear, ready, isOpen, open, close, add, setQuantity, remove, lastAddedKey, announcement],
+    [state.lines, subtotal, chargeSubtotal, deliveryCountry, shippingRegion, setShippingRegion, method.id, shippingCost, discountCode, applyDiscountCode, removeDiscountCode, discountAmount, clear, ready, isOpen, open, close, add, setQuantity, remove, lastAddedKey, announcement],
   );
 
   return (

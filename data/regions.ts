@@ -57,12 +57,8 @@ export const REGIONS: Record<RegionId, Region> = {
     name: 'US dollar',
     locale: 'en-US',
     pricing: 'fixed',
-    checkout: {
-      // Flip to true once a USD-capable checkout is connected (see README → "US checkout")
-      enabled: false,
-      closedMessage:
-        'Checkout in US dollars isn’t open yet. You can still order (including delivery to the US) by switching to pounds: you’ll pay the UK price in GBP and your card provider converts it.',
-    },
+    // US orders pay the US price list, charged in GBP (data/product.ts → usChargeGBP)
+    checkout: { enabled: true },
   },
   EUR: C('EUR', '€', 'Euro', 'en-IE'),
   CAD: C('CAD', '$', 'Canadian dollar', 'en-CA'),

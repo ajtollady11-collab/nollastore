@@ -8,11 +8,10 @@ import { DiscountField } from '@/components/cart/DiscountField';
 import { Button } from '@/components/ui/Button';
 import { SmartImage } from '@/components/ui/SmartImage';
 import { countries, UK_CODE } from '@/data/countries';
-import { GIFT, PRODUCT, cartImageFor, describeSelection } from '@/data/product';
+import { GIFT, PRODUCT, US_PRICE_COUNTRIES, cartImageFor, chargedPriceFor, describeSelection } from '@/data/product';
 import { useRegion } from '@/components/store/RegionProvider';
 import { TM } from '@/components/ui/TM';
 import { shippingRegions } from '@/data/site';
-import { linePrice } from '@/lib/cart';
 import { formatPrice } from '@/lib/format';
 import { startCheckout } from '@/lib/checkout';
 import type { DeliveryDetails } from '@/lib/order';
@@ -35,7 +34,7 @@ const SAVED_KEY = 'nolla-delivery-v1';
 
 export function CheckoutForm() {
   const {
-    ready, lines, chargeSubtotal: subtotal, discountAmount, discountCode, shippingCost, total,
+    ready, lines, chargeSubtotal: subtotal, setDeliveryCountry, discountAmount, discountCode, shippingCost, total,
     shippingRegion, setShippingRegion, shippingMethod, setShippingMethod,
     gifts,
   } = useCart();
@@ -56,7 +55,14 @@ export function CheckoutForm() {
     }
   }, []);
 
-  // The country decides the delivery options
+  // Dollar shoppers start with the US selected (if they haven't saved details before)
+  useEffect(() => {
+    if (region === 'USD') setD((prev) => (prev.address1 ? prev : { ...prev, country: 'US' }));
+  }, [region]);
+
+  // The delivery country decides the price list (US vs UK) and the delivery options
+  useEffect(() => setDeliveryCountry(d.country), [d.country, setDeliveryCountry]);
+
   const isUK = d.country === UK_CODE;
   useEffect(() => {
     const region = isUK ? 'uk' : 'international';
@@ -103,10 +109,10 @@ export function CheckoutForm() {
         key: l.key,
         variant: describeSelection(l.selection),
         qty: l.quantity,
-        price: linePrice(l, 'GBP') * l.quantity,
+        price: chargedPriceFor(l.selection.size, d.country) * l.quantity,
         img: cartImageFor(l.selection.colour),
       })),
-    [lines],
+    [lines, d.country],
   );
 
   if (!ready || !regionReady) return <div className="min-h-[50vh]" aria-busy="true" />;
@@ -248,6 +254,7 @@ export function CheckoutForm() {
         {payingInOtherCurrency && (
           <p className="mt-6 rounded-soft border border-charcoal/10 bg-ivory px-4 py-3 text-[0.85rem] leading-relaxed text-charcoal/70">
             You’re browsing in {region}. Orders are charged in pounds (GBP), so you’ll pay {formatPrice(total)} and your card provider converts it.
+            {US_PRICE_COUNTRIES.includes(d.country) && ' US deliveries are charged at our US prices.'}
           </p>
         )}
 

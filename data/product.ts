@@ -86,6 +86,12 @@ export type Size = {
   prices: { GBP: number; USD: number };
   /** Converted currencies follow the GBP reference price */
   referencePrices: { GBP: number | null; USD: number | null };
+  /**
+   * What checkout charges (in GBP, pence) for orders DELIVERED TO THE US.
+   * US delivery costs us more, so this is the US $ price converted to £ (at about $1.34 to £1),
+   * slightly above the UK price. Update these if the exchange rate moves a lot.
+   */
+  usChargeGBP: number;
   /** Small label on the size option */
   badge?: string;
   /** Plain-language guidance for the size guide (no bed-fit promises) */
@@ -104,6 +110,7 @@ export const SIZES: Size[] = [
     lengthCm: 150,
     prices: { GBP: 4999, USD: 7499 },
     referencePrices: { GBP: null, USD: null },
+    usChargeGBP: 5596, // ≈ $74.99
     guide: 'A smaller throw. Right for one person on the sofa, an armchair or the end of the bed.',
     weight: 'about 1.1 kg',
   },
@@ -114,6 +121,7 @@ export const SIZES: Size[] = [
     lengthCm: 200,
     prices: { GBP: 7999, USD: 11499 },
     referencePrices: { GBP: null, USD: null },
+    usChargeGBP: 8581, // ≈ $114.99
     guide: 'Room to stretch out under, or to share with someone on the sofa. More coverage across a bed.',
   },
   {
@@ -124,6 +132,7 @@ export const SIZES: Size[] = [
     prices: { GBP: 8999, USD: 12499 },
     // UK reference price as briefed. US: set a figure here only if you have one to stand behind.
     referencePrices: { GBP: 11999, USD: null },
+    usChargeGBP: 9328, // ≈ $124.99
     badge: 'Our largest',
     guide: 'Our biggest. Enough to share, to wrap right around you, or to spread generously across a bed.',
     weight: 'about 2.8 kg',
@@ -214,8 +223,17 @@ export function priceFor(sizeId: SizeId, region: RegionId, rates?: Rates): Price
   return { price, reference: ref && ref > price ? ref : null };
 }
 
-/** The amount actually charged at checkout (always GBP today) */
-export const chargedPriceFor = (sizeId: SizeId) => priceFor(sizeId, 'GBP').price;
+/** Delivery countries that pay the US price list */
+export const US_PRICE_COUNTRIES = ['US'];
+
+/**
+ * The amount actually charged at checkout, always in GBP (pence).
+ * Orders delivered to the US pay the US price list; everyone else pays the UK price.
+ */
+export function chargedPriceFor(sizeId: SizeId, deliveryCountry?: string): number {
+  const size = getSize(sizeId) ?? SIZES[SIZES.length - 1];
+  return deliveryCountry && US_PRICE_COUNTRIES.includes(deliveryCountry.toUpperCase()) ? size.usChargeGBP : size.prices.GBP;
+}
 
 /** "White / 200 × 230 cm" */
 export function describeSelection(sel: Selection): string {
