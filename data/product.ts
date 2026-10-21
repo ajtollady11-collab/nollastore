@@ -88,8 +88,8 @@ export type Size = {
   referencePrices: { GBP: number | null; USD: number | null };
   /**
    * What checkout charges (in GBP, pence) for orders DELIVERED TO THE US.
-   * US delivery costs us more, so this is the US $ price converted to £ (at about $1.34 to £1),
-   * slightly above the UK price. Update these if the exchange rate moves a lot.
+   * This is the US $ price converted to £ (at about $1.34 to £1).
+   * Update these if the exchange rate moves a lot.
    */
   usChargeGBP: number;
   /** Small label on the size option */
@@ -108,9 +108,9 @@ export const SIZES: Size[] = [
     label: '100 × 150 cm',
     widthCm: 100,
     lengthCm: 150,
-    prices: { GBP: 4999, USD: 7499 },
+    prices: { GBP: 4999, USD: 5999 },
     referencePrices: { GBP: null, USD: null },
-    usChargeGBP: 5596, // ≈ $74.99
+    usChargeGBP: 4477, // ≈ $59.99
     guide: 'A smaller throw. Right for one person on the sofa, an armchair or the end of the bed.',
     weight: 'about 1.1 kg',
   },
@@ -119,9 +119,9 @@ export const SIZES: Size[] = [
     label: '150 × 200 cm',
     widthCm: 150,
     lengthCm: 200,
-    prices: { GBP: 7999, USD: 11499 },
+    prices: { GBP: 7999, USD: 8999 },
     referencePrices: { GBP: null, USD: null },
-    usChargeGBP: 8581, // ≈ $114.99
+    usChargeGBP: 6716, // ≈ $89.99
     guide: 'Room to stretch out under, or to share with someone on the sofa. More coverage across a bed.',
   },
   {
@@ -129,10 +129,10 @@ export const SIZES: Size[] = [
     label: '200 × 230 cm',
     widthCm: 200,
     lengthCm: 230,
-    prices: { GBP: 8999, USD: 12499 },
+    prices: { GBP: 8999, USD: 9999 },
     // UK reference price as briefed. US: set a figure here only if you have one to stand behind.
     referencePrices: { GBP: 11999, USD: null },
-    usChargeGBP: 9328, // ≈ $124.99
+    usChargeGBP: 7462, // ≈ $99.99
     badge: 'Our largest',
     guide: 'Our biggest. Enough to share, to wrap right around you, or to spread generously across a bed.',
     weight: 'about 2.8 kg',
