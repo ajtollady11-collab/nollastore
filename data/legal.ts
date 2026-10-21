@@ -144,7 +144,7 @@ export const termsAndConditions: LegalPageContent = {
     {
       heading: '3. Prices',
       p: [
-        'You can view prices in a number of currencies. Prices in currencies other than GBP and USD are converted from our GBP prices at current exchange rates and are approximate. Orders are charged in GBP (£); if you pay with a card in another currency, your card provider converts the amount and may charge a fee. Orders delivered to the United States are charged at our US prices, which are slightly higher to reflect the cost of delivery there. The price that applies to your order is the GBP price shown at checkout.',
+        'You can view prices in a number of currencies. Prices in currencies other than GBP and USD are converted from our GBP prices at current exchange rates and are approximate. Orders are charged in GBP (£); if you pay with a card in another currency, your card provider converts the amount and may charge a fee. Orders delivered to the United States are charged at our US prices, converted to GBP. The price that applies to your order is the GBP price shown at checkout.',
         'Where we show a limited-time offer next to a regular price, the offer applies only for as long as it is shown on our website.',
         'We reserve the right to correct pricing or product information errors. If an error materially affects an order you have placed, we will contact you before processing the order where reasonably possible.',
       ],
