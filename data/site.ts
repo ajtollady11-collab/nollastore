@@ -27,18 +27,18 @@ export const site = {
 
 /** Header navigation. Keep it short: we sell one thing. */
 export const navLinks = [
-  { label: 'Shop', href: '/#shop' },
+  { label: 'Shop', href: '/shop' },
   { label: 'Our story', href: '/#story' },
-  { label: 'FAQ', href: '/#faq' },
+  { label: 'FAQ', href: '/shop#faq' },
 ];
 
 export const footerLinks = [
   {
     title: 'Shop',
     links: [
-      { label: 'Nuv™ Velvet Blanket', href: '/#shop' },
-      { label: 'Size guide', href: '/#size-guide' },
-      { label: 'The free cloud pillow', href: '/#gift' },
+      { label: 'Nuv™ Velvet Blanket', href: '/shop' },
+      { label: 'Size guide', href: '/shop#size-guide' },
+      { label: 'The free cloud pillow', href: '/shop#gift' },
     ],
   },
   {
