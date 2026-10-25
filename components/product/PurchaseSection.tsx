@@ -68,7 +68,7 @@ export function PurchaseSection() {
             </p>
           )}
 
-          <LiveActivity className="mt-4 flex items-center gap-2.5 text-[0.85rem] text-charcoal/75" />
+          <LiveActivity />
 
           <div className="mt-7 space-y-7 border-t border-charcoal/10 pt-7">
             <ColourSelector value={selection.colour} onChange={setColour} />
