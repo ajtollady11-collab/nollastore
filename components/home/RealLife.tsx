@@ -74,7 +74,7 @@ function ClipCard({ src, poster, label }: { src: string; poster: string; label: 
           className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
-      <a href="#shop" className="mt-3 inline-block text-[0.85rem] text-charcoal/75 underline decoration-charcoal/25 underline-offset-4 hover:text-charcoal">
+      <a href="/shop#shop" className="mt-3 inline-block text-[0.85rem] text-charcoal/75 underline decoration-charcoal/25 underline-offset-4 hover:text-charcoal">
         Shop the blanket
       </a>
     </figure>
