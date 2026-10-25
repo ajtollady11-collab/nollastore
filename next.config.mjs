@@ -8,11 +8,10 @@ const nextConfig = {
     // When photography moves to remote storage, add its host here, e.g.:
     // remotePatterns: [{ protocol: 'https', hostname: 'YOUR-PROJECT.supabase.co' }],
   },
-  // Nolla is now a one-product store: old shop and product links land on the purchase section
+  // Nolla sells one product: old product links land on the product page (/shop)
   async redirects() {
     return [
-      { source: '/shop', destination: '/#shop', permanent: true },
-      { source: '/products/:slug*', destination: '/#shop', permanent: true },
+      { source: '/products/:slug*', destination: '/shop', permanent: true },
     ];
   },
 };
