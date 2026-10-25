@@ -15,7 +15,7 @@ export function FinalCta() {
               {finalCta.title}
             </h2>
             <p className="mt-5 max-w-[34ch] text-[1.02rem] leading-relaxed text-ivory/80">{finalCta.body}</p>
-            <Button href="/#shop" variant="light" size="lg" className="mt-8">
+            <Button href="/shop" variant="light" size="lg" className="mt-8">
               {finalCta.cta}
             </Button>
           </div>

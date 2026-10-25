@@ -1,4 +1,4 @@
-import { ArrowDown, Gift } from 'lucide-react';
+import { ArrowRight, Gift } from 'lucide-react';
 import { SmartImage } from '@/components/ui/SmartImage';
 import { Button } from '@/components/ui/Button';
 import { TM } from '@/components/ui/TM';
@@ -52,9 +52,9 @@ function HeroCopy({ desktop }: { desktop?: boolean }) {
       </h1>
       <p className="mt-5 max-w-[34ch] text-[1.02rem] leading-relaxed text-charcoal/75 sm:text-[1.08rem]">{hero.body}</p>
       <div className="mt-8 flex flex-col items-start gap-6">
-        <Button href="#shop" size="lg" className="w-full sm:w-auto">
+        <Button href="/shop" size="lg" className="w-full sm:w-auto">
           {hero.cta}
-          <ArrowDown className="h-4 w-4" strokeWidth={1.6} aria-hidden />
+          <ArrowRight className="h-4 w-4" strokeWidth={1.6} aria-hidden />
         </Button>
         <TrustRow />
       </div>
