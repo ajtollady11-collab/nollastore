@@ -126,7 +126,7 @@ export function CheckoutForm() {
           <Button onClick={() => setRegion('GBP')} size="lg">
             Switch to pounds (£ GBP)
           </Button>
-          <Button href="/#shop" variant="secondary" size="lg">
+          <Button href="/shop" variant="secondary" size="lg">
             Back to the shop
           </Button>
         </div>
@@ -139,7 +139,7 @@ export function CheckoutForm() {
       <div className="flex min-h-[50vh] flex-col items-center justify-center text-center">
         <h1 className="font-serif text-[2.4rem] font-light tracking-[-0.035em]">Your bag is empty.</h1>
         <p className="mt-3 text-charcoal/65">Every blanket comes with a free cloud pillow.</p>
-        <Button href="/#shop" size="lg" className="mt-8">
+        <Button href="/shop" size="lg" className="mt-8">
           Shop the blanket
         </Button>
       </div>
