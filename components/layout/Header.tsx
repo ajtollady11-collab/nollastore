@@ -130,7 +130,7 @@ export function Header() {
             <p className="mb-2 text-[0.8rem] text-charcoal/55">Storefront</p>
             <RegionSelect variant="full" className="w-full" />
           </div>
-          <Button href="/#shop" onClick={() => setMenuOpen(false)} size="lg" fullWidth className="mt-8">
+          <Button href="/shop" onClick={() => setMenuOpen(false)} size="lg" fullWidth className="mt-8">
             Shop the blanket
           </Button>
         </div>
