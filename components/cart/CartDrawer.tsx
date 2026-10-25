@@ -66,7 +66,7 @@ export function CartDrawer() {
           <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
             <p className="font-serif text-[1.6rem] font-light tracking-[-0.02em]">Your bag is empty.</p>
             <p className="mt-2 max-w-[30ch] text-[0.92rem] text-charcoal/60">Every blanket comes with a free cloud pillow.</p>
-            <Button href="/#shop" onClick={close} size="lg" className="mt-8">
+            <Button href="/shop" onClick={close} size="lg" className="mt-8">
               Shop the blanket
             </Button>
           </div>
