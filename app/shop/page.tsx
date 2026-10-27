@@ -8,7 +8,7 @@ import { SelectionProvider } from '@/components/product/SelectionProvider';
 import { PurchaseSection } from '@/components/product/PurchaseSection';
 import { StickyPurchaseBar } from '@/components/product/StickyPurchaseBar';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
-import { PRODUCT, SIZES, COLOURS } from '@/data/product';
+import { PRODUCT, COLOURS, sizeDisplay, sizesFor } from '@/data/product';
 import { site } from '@/data/site';
 
 export const metadata: Metadata = {
@@ -46,10 +46,10 @@ function ProductJsonLd() {
     description: PRODUCT.description,
     brand: { '@type': 'Brand', name: 'nolla' },
     image: [`${site.url}/images/home/hero-nuv-faux-fur-2k.webp`],
-    offers: SIZES.flatMap((s) =>
-      COLOURS.map((c) => ({
+    offers: COLOURS.flatMap((c) =>
+      sizesFor(c.collection).map((s) => ({
         '@type': 'Offer',
-        name: `${c.label} / ${s.label}`,
+        name: `${c.label} / ${sizeDisplay(s)}`,
         price: (s.prices.GBP / 100).toFixed(2),
         priceCurrency: 'GBP',
         availability: 'https://schema.org/InStock',
