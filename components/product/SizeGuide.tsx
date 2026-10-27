@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
-import { SIZES, type SizeId } from '@/data/product';
+import { getSize, sizeDisplay, sizesFor, type SizeId } from '@/data/product';
 import { cn } from '@/lib/cn';
 
 /**
@@ -10,6 +10,8 @@ import { cn } from '@/lib/cn';
  * same corner, so the difference in coverage is easy to see at a glance.
  */
 export function SizeGuide({ highlight, onPick, compact }: { highlight?: SizeId; onPick?: (s: SizeId) => void; compact?: boolean }) {
+  // The sizes of the collection being looked at (the chosen blanket's), classic by default
+  const SIZES = sizesFor((highlight && getSize(highlight)?.collection) || 'classic');
   const max = SIZES[SIZES.length - 1];
   const W = 240;
   const scale = W / max.widthCm;
@@ -57,7 +59,7 @@ export function SizeGuide({ highlight, onPick, compact }: { highlight?: SizeId; 
                 className={cn('block w-full py-4 text-left', onPick && 'group')}
               >
                 <span className="flex items-baseline justify-between gap-4">
-                  <span className={cn('font-serif text-[1.3rem] font-light tracking-[-0.01em] tabular-nums', onPick && 'group-hover:text-mocha')}>{s.label}</span>
+                  <span className={cn('font-serif text-[1.3rem] font-light tracking-[-0.01em] tabular-nums', onPick && 'group-hover:text-mocha')}>{sizeDisplay(s)}</span>
                   {s.badge && <span className="text-[0.7rem] font-medium uppercase tracking-[0.12em] text-mocha">{s.badge}</span>}
                 </span>
                 <span className="mt-1 block text-[0.9rem] leading-relaxed text-charcoal/65">

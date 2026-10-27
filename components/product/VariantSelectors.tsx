@@ -1,6 +1,6 @@
 'use client';
 
-import { COLOURS, SIZES, getColour, type ColourId, type SizeId } from '@/data/product';
+import { CLASSIC_COLOURS, CUSTOM_COLOURS, getColour, getSize, sizesFor, type Colour, type ColourId, type SizeId } from '@/data/product';
 import { useRegion } from '@/components/store/RegionProvider';
 import { cn } from '@/lib/cn';
 
@@ -21,36 +21,65 @@ export function ColourSelector({ value, onChange, name = 'colour' }: { value: Co
           <span className="font-medium text-charcoal">{getColour(value)?.label}</span>
         </span>
       </legend>
-      <div className="mt-3 flex flex-wrap gap-2.5">
-        {COLOURS.map((c) => {
-          const selected = c.id === value;
-          const unavailable = c.available === false;
-          return (
-            <label key={c.id} className={cn('relative grid h-11 w-11 cursor-pointer place-items-center', unavailable && 'cursor-not-allowed opacity-40')}>
-              <input
-                type="radio"
-                name={name}
-                value={c.id}
-                checked={selected}
-                disabled={unavailable}
-                onChange={() => onChange(c.id)}
-                className="peer sr-only"
-              />
-              <span
-                className={cn(
-                  'block h-11 w-11 rounded-full p-[3px] transition-[box-shadow] duration-300 ease-soft',
-                  'peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-mocha',
-                  selected ? 'shadow-[inset_0_0_0_1.5px_#252321]' : 'shadow-[inset_0_0_0_1px_rgba(37,35,33,0.12)] hover:shadow-[inset_0_0_0_1px_rgba(37,35,33,0.45)]',
-                )}
-              >
-                <span className="block h-full w-full rounded-full shadow-[inset_0_0_0_1px_rgba(37,35,33,0.08)]" style={{ backgroundColor: c.swatch }} />
-              </span>
-              <span className="sr-only">{c.label}</span>
-            </label>
-          );
-        })}
-      </div>
+      <SwatchRow colours={CLASSIC_COLOURS} value={value} onChange={onChange} name={name} />
+      {/* The custom collection sits underneath, after a small gap */}
+      <p className="mt-5 text-[0.78rem] text-charcoal/55">Custom collection</p>
+      <SwatchRow colours={CUSTOM_COLOURS} value={value} onChange={onChange} name={name} className="mt-2" />
     </fieldset>
+  );
+}
+
+function SwatchRow({
+  colours,
+  value,
+  onChange,
+  name,
+  className,
+}: {
+  colours: Colour[];
+  value: ColourId;
+  onChange: (c: ColourId) => void;
+  name: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn('mt-3 flex flex-wrap gap-2.5', className)}>
+      {colours.map((c) => {
+        const selected = c.id === value;
+        const unavailable = c.available === false;
+        return (
+          <label
+            key={c.id}
+            className={cn('relative grid h-11 w-11 cursor-pointer place-items-center', unavailable && 'cursor-not-allowed opacity-40')}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={c.id}
+              checked={selected}
+              disabled={unavailable}
+              onChange={() => onChange(c.id)}
+              className="peer sr-only"
+            />
+            <span
+              className={cn(
+                'block h-11 w-11 rounded-full p-[3px] transition-[box-shadow] duration-300 ease-soft',
+                'peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-mocha',
+                selected
+                  ? 'shadow-[inset_0_0_0_1.5px_#252321]'
+                  : 'shadow-[inset_0_0_0_1px_rgba(37,35,33,0.12)] hover:shadow-[inset_0_0_0_1px_rgba(37,35,33,0.45)]',
+              )}
+            >
+              <span
+                className="block h-full w-full rounded-full shadow-[inset_0_0_0_1px_rgba(37,35,33,0.08)]"
+                style={{ background: c.swatch }}
+              />
+            </span>
+            <span className="sr-only">{c.label}</span>
+          </label>
+        );
+      })}
+    </div>
   );
 }
 
@@ -66,6 +95,8 @@ export function SizeSelector({
   name?: string;
 }) {
   const { money, ready, price: priceOf } = useRegion();
+  // Only the sizes of the chosen blanket's collection
+  const sizes = sizesFor(getSize(value)?.collection ?? 'classic');
   return (
     <fieldset>
       <div className="flex items-baseline justify-between">
@@ -77,7 +108,7 @@ export function SizeSelector({
         )}
       </div>
       <div className="mt-3 space-y-2">
-        {SIZES.map((s) => {
+        {sizes.map((s) => {
           const selected = s.id === value;
           const { price, reference } = priceOf(s.id);
           const unavailable = s.available === false;
@@ -101,16 +132,28 @@ export function SizeSelector({
                 className="sr-only"
               />
               <span
-                className={cn('grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border transition-colors', selected ? 'border-charcoal' : 'border-charcoal/30')}
+                className={cn(
+                  'grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border transition-colors',
+                  selected ? 'border-charcoal' : 'border-charcoal/30',
+                )}
                 aria-hidden
               >
-                <span className={cn('h-2 w-2 rounded-full bg-charcoal transition-transform duration-300 ease-soft', selected ? 'scale-100' : 'scale-0')} />
+                <span
+                  className={cn(
+                    'h-2 w-2 rounded-full bg-charcoal transition-transform duration-300 ease-soft',
+                    selected ? 'scale-100' : 'scale-0',
+                  )}
+                />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="text-[0.95rem] font-medium tabular-nums text-charcoal">{s.label}</span>
+                  <span className="text-[0.95rem] font-medium text-charcoal">
+                    {s.name} <span className="font-normal tabular-nums text-charcoal/60">({s.label})</span>
+                  </span>
                   {s.badge && (
-                    <span className="rounded-full bg-oat px-2 py-0.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] text-mocha">{s.badge}</span>
+                    <span className="rounded-full bg-oat px-2 py-0.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] text-mocha">
+                      {s.badge}
+                    </span>
                   )}
                 </span>
               </span>
