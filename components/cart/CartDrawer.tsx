@@ -7,7 +7,7 @@ import { useRegion } from '@/components/store/RegionProvider';
 import { Button } from '@/components/ui/Button';
 import { SmartImage } from '@/components/ui/SmartImage';
 import { TM } from '@/components/ui/TM';
-import { GIFT, PRODUCT, cartImageFor, getColour, getSize } from '@/data/product';
+import { GIFT, PRODUCT, cartImageFor, getColour, getSize, sizeDisplay } from '@/data/product';
 import { deliveryCopy } from '@/data/site';
 import { formatPrice } from '@/lib/format';
 import { MAX_QTY } from '@/lib/cart';
@@ -107,7 +107,7 @@ export function CartDrawer() {
                               <TM>{PRODUCT.shortName}</TM>
                             </p>
                             <p className="mt-1 text-[0.82rem] text-charcoal/60">
-                              {colour.label} · {size.label}
+                              {colour.label} · {sizeDisplay(size)}
                             </p>
                           </div>
                           <p className="shrink-0 text-[0.95rem] tabular-nums">{money(unit * line.quantity)}</p>
