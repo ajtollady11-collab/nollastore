@@ -1,5 +1,5 @@
 import { countries, UK_CODE } from '@/data/countries';
-import { GIFT, PRODUCT, chargedPriceFor, getColour, getSize, giftQuantity, isValidSelection, type Selection } from '@/data/product';
+import { GIFT, PRODUCT, chargedPriceFor, getColour, getSize, giftQuantity, isValidSelection, sizeDisplay, type Selection } from '@/data/product';
 import { REGIONS, isRegionId, type CurrencyCode, type RegionId } from '@/data/regions';
 import { shippingRegions, type ShippingMethodId } from '@/data/site';
 import { discountCodes } from '@/data/marketing';
@@ -76,7 +76,7 @@ export function priceOrder(
     lines.push({
       name: PRODUCT.name,
       // Supplier colour name in brackets when it differs, so the order is unambiguous to fulfil
-      variant: `${colour.label}${colour.supplierName !== colour.label ? ` (${colour.supplierName})` : ''} / ${size.label}`,
+      variant: `${colour.label}${colour.supplierName !== colour.label ? ` (${colour.supplierName})` : ''} / ${sizeDisplay(size)}`,
       quantity: qty,
       // Always charged in GBP: the US price list for US deliveries, the UK price otherwise
       unitPrice: chargedPriceFor(size.id, deliveryCountry),

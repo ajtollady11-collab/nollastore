@@ -1,6 +1,6 @@
 import 'server-only';
 import { randomUUID } from 'node:crypto';
-import { COLOURS, PRODUCT, SIZES } from '@/data/product';
+import { COLOURS, PRODUCT, SIZES, sizeDisplay } from '@/data/product';
 import { countryName } from '@/data/countries';
 
 /**
@@ -131,11 +131,12 @@ function parseBlanket(name: string): Pick<OrderItem, 'colour' | 'supplierColour'
   const colourPart = slash >= 0 ? inner.slice(0, slash).trim() : inner;
   const sizePart = slash >= 0 ? inner.slice(slash + 3).trim() : '';
   const colour = COLOURS.find((c) => colourPart === c.label || colourPart.startsWith(`${c.label} (`));
-  const size = SIZES.find((s) => s.label === sizePart);
+  // "Large (150 × 200 cm)" (older orders just say "150 × 200 cm")
+  const size = SIZES.find((s) => sizeDisplay(s) === sizePart || s.label === sizePart);
   return {
     colour: colour?.label ?? colourPart,
     supplierColour: colour?.supplierName ?? colourPart,
-    size: size?.label ?? sizePart,
+    size: size ? sizeDisplay(size) : sizePart,
   };
 }
 
