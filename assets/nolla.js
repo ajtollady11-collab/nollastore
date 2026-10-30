@@ -267,7 +267,32 @@
     menu.children[0]?.addEventListener('click', () => setMenu(false));
     $$('a', menu).forEach((a) => a.addEventListener('click', () => setMenu(false)));
   }
-  $$('[data-currency-select]').forEach((sel) => sel.addEventListener('change', () => sel.form.submit()));
+  const GEO_KEY = 'nolla-country-set';
+  const geoDone = () => { try { return localStorage.getItem(GEO_KEY) === '1'; } catch { return true; } };
+  const markGeoDone = () => { try { localStorage.setItem(GEO_KEY, '1'); } catch {} };
+  $$('[data-currency-select]').forEach((sel) =>
+    sel.addEventListener('change', () => {
+      markGeoDone(); // a manual choice always wins
+      sel.form.submit();
+    }),
+  );
+
+  /* First visit: switch to the visitor's own country (US visitors get US dollar prices), once only */
+  (async () => {
+    const sel = $('[data-currency-select]');
+    if (!sel || geoDone() || !window.Shopify) return;
+    try {
+      const current = window.Shopify.country;
+      const url = (window.Shopify.routes?.root || '/') + 'browsing_context_suggestions.json?country[enabled]=true&country[exclude]=' + encodeURIComponent(current || '');
+      const res = await fetch(url).then((r) => r.json());
+      const detected = res?.detected_values?.country?.handle;
+      markGeoDone();
+      if (!detected || detected === current) return;
+      if (![...sel.options].some((o) => o.value === detected)) return; // country we don't sell to
+      sel.value = detected;
+      sel.form.submit();
+    } catch {}
+  })();
 
   /* ───────────── Fun timer: counts down to midnight UK time ───────────── */
   $$('[data-fun-timer]').forEach((el) => {
