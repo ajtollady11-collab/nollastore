@@ -548,7 +548,7 @@
   const SW_OFF = ['shadow-[inset_0_0_0_1px_rgba(37,35,33,0.12)]', 'hover:shadow-[inset_0_0_0_1px_rgba(37,35,33,0.45)]'];
   const FAB_ON = ['shadow-[inset_0_0_0_1.5px_#FBF9F5]'];
   const FAB_OFF = ['shadow-[inset_0_0_0_1px_rgba(251,249,245,0.2)]', 'hover:shadow-[inset_0_0_0_1px_rgba(251,249,245,0.6)]'];
-  const labelOfInput = (input) => input.parentElement.querySelector('.sr-only')?.textContent.trim();
+  const labelOfInput = (input) => input.parentElement.querySelector('span.sr-only')?.textContent.trim();
 
   function renderSwatches() {
     $$('input[name=colour], input[name=fabric-colour]').forEach((input) => {

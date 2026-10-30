@@ -13,7 +13,7 @@
     <meta property="og:site_name" content="nolla">
     <meta property="og:title" content="{{ page_title | default: 'nolla | make staying in feel better.' | escape }}">
     <meta property="og:type" content="{% if template.name == 'product' %}product{% else %}website{% endif %}">
-    <meta property="og:image" content="{{ 'hero-nuv-faux-fur-2k.webp' | asset_img_url: '1200x' | prepend: 'https:' }}">
+    <meta property="og:image" content="{{ 'hero-nuv-faux-fur-2k.webp' | asset_url | prepend: 'https:' }}">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="preload" href="{{ 'fraunces.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ 'dm-sans.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
