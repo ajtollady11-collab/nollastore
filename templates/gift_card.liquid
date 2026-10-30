@@ -1,0 +1,9 @@
+{% layout none %}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Your nolla gift card</title>{{ content_for_header }}</head>
+<body style="font-family:sans-serif;background:#F7F3EC;color:#252321;text-align:center;padding:4rem 1rem">
+  <h1>Your nolla gift card</h1>
+  <p style="font-size:2rem">{{ gift_card.balance | money }}</p>
+  <p>Code: <strong>{{ gift_card.code | format_code }}</strong></p>
+  <p><a href="{{ shop.url }}">Shop now</a></p>
+</body></html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code | default: 'en' }}" class="__variable_ae0228 __variable_546988">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#F7F3EC">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <title>
+      {%- if template.name == 'index' -%}nolla | make staying in feel better.
+      {%- else -%}{{ page_title }} | nolla{%- endif -%}
+    </title>
+    <meta name="description" content="{{ page_description | default: 'The Nolla Nuv™ Velvet Blanket: deep, rippled faux fur in six colours and three sizes, with a free cloud pillow in every order.' | escape }}">
+    <meta property="og:site_name" content="nolla">
+    <meta property="og:title" content="{{ page_title | default: 'nolla | make staying in feel better.' | escape }}">
+    <meta property="og:type" content="{% if template.name == 'product' %}product{% else %}website{% endif %}">
+    <meta property="og:image" content="{{ 'hero-nuv-faux-fur-2k.webp' | asset_img_url: '1200x' | prepend: 'https:' }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preload" href="{{ 'fraunces.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ 'dm-sans.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+    <style>
+      @font-face{font-family:"serif";src:url({{ 'fraunces.woff2' | asset_url }}) format("woff2");font-display:swap;font-weight:100 900}
+      @font-face{font-family:sans;src:url({{ 'dm-sans.woff2' | asset_url }}) format("woff2");font-display:swap;font-weight:100 1000}
+    </style>
+    {{ 'nolla.css' | asset_url | stylesheet_tag }}
+    {{ 'nolla-extra.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+  <body class="min-h-dvh">
+    <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-charcoal focus:px-5 focus:py-3 focus:text-ivory" href="#main">Skip to content</a>
+    {% section 'announcement-bar' %}
+    {% section 'fun-timer' %}
+    {% section 'header' %}
+    <main id="main">{{ content_for_layout }}</main>
+    {% section 'footer' %}
+    {% render 'cart-drawer' %}
+    {% render 'nolla-data' %}
+    <script src="{{ 'nolla.js' | asset_url }}" defer></script>
+  </body>
+</html>

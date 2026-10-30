@@ -1,0 +1,35 @@
+{%- comment -%} Data for nolla.js: currency, the free pillow, and (on product pages) both blanket products. {%- endcomment -%}
+{%- liquid
+  assign pillow = all_products['nimbus-cloud-pillow']
+  assign handles = 'nuv-velvet-blanket,nuv-velvet-blanket-custom' | split: ','
+-%}
+<script type="application/json" id="nolla-data">
+{
+  "currency": {{ cart.currency.iso_code | json }},
+  "pillowVariantId": {{ pillow.selected_or_first_available_variant.id | default: 0 | json }},
+  "pillowImage": {{ pillow.featured_image | image_url | json }},
+  "pillowAlt": {{ pillow.featured_image.alt | json }}
+  {%- if template.name == 'product' -%},
+  "products": {
+    {%- for h in handles -%}
+      {%- assign p = all_products[h] -%}
+      {%- if h contains 'custom' -%}"custom"{%- else -%}"classic"{%- endif -%}: {
+        "handle": {{ p.handle | json }},
+        "colours": {{ p.options_with_values[0].values | json }},
+        "sizes": {{ p.options_with_values[1].values | json }},
+        "variants": [
+          {%- for v in p.variants -%}
+            {"id": {{ v.id }}, "option1": {{ v.option1 | json }}, "option2": {{ v.option2 | json }}, "price": {{ v.price }}, "compare_at_price": {{ v.compare_at_price | default: 0 }}, "available": {{ v.available }}}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ],
+        "media": [
+          {%- for m in p.media -%}
+            {"alt": {{ m.alt | json }}, "src": {{ m.preview_image | image_url | json }}}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  }
+  {%- endif %}
+}
+</script>

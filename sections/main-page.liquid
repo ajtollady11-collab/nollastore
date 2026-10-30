@@ -1,0 +1,24 @@
+<section class="container-soft pb-24 pt-8 sm:pt-14">
+  <div class="max-w-2xl">
+    <h1 class="font-serif text-[3rem] font-light leading-[0.95] tracking-[-0.045em] sm:text-display-md">{{ page.title }}{% unless page.title contains '.' or page.title contains '?' %}.{% endunless %}</h1>
+    <div class="nolla-rte mt-10">{{ page.content }}</div>
+    {%- if page.template_suffix == 'contact' -%}
+      <div class="mt-12">
+        {%- form 'contact', class: 'space-y-4' -%}
+          {%- if form.posted_successfully? -%}
+            <p role="status" class="rounded-soft bg-oat-soft px-5 py-4 text-[0.95rem] text-charcoal/80">Thank you. We’ve got your message and will reply by email.</p>
+          {%- endif -%}
+          {%- if form.errors -%}<p role="alert" class="text-[0.9rem] text-mocha">{{ form.errors | default_errors }}</p>{%- endif -%}
+          <label class="block"><span class="text-[0.85rem] text-charcoal/65">Name</span><input class="nolla-input mt-1.5" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></label>
+          <label class="block"><span class="text-[0.85rem] text-charcoal/65">Email</span><input class="nolla-input mt-1.5" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></label>
+          <label class="block"><span class="text-[0.85rem] text-charcoal/65">Message</span><textarea class="nolla-input mt-1.5" name="contact[body]" required>{{ form.body }}</textarea></label>
+          <button type="submit" class="relative inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans font-medium tracking-[0.01em] transition-[background-color,color,border-color,text-decoration-color,transform] duration-300 ease-soft active:scale-[0.985] bg-charcoal text-ivory hover:bg-espresso h-14 px-8 text-[0.98rem]">Send message</button>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Page", "settings": [] }
+{% endschema %}

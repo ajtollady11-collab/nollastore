@@ -1,0 +1,8 @@
+{%- if section.settings.enabled -%}<div aria-live="off" class="border-b border-charcoal/10 bg-oat-soft" role="timer"><div class="container-soft flex h-9 items-center justify-center gap-3 text-[0.75rem] text-charcoal/70 sm:text-[0.78rem]"><span aria-label="-- hours, -- minutes, -- seconds" class="font-medium tabular-nums tracking-[0.04em] text-charcoal" data-fun-timer="" data-time-zone="Europe/London">--:--:--</span><span aria-hidden="true" class="h-3 w-px bg-charcoal/20"></span><span class="truncate">{{ section.settings.label }}</span></div></div>{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fun timer",
+  "settings": [{"type": "checkbox", "id": "enabled", "label": "Show the timer", "default": true}, {"type": "text", "id": "label", "label": "Text", "default": "Time Until Sale Ends"}]
+}
+{% endschema %}

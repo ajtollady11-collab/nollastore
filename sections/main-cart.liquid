@@ -1,0 +1,35 @@
+<section class="container-soft pb-24 pt-8 sm:pt-14">
+  <div class="max-w-2xl">
+    <h1 class="font-serif text-[3rem] font-light leading-[0.95] tracking-[-0.045em] sm:text-display-md">Your bag.</h1>
+    {%- assign blankets = 0 -%}
+    {%- for item in cart.items -%}{%- if item.product.handle contains 'nuv-velvet-blanket' -%}{%- assign blankets = blankets | plus: item.quantity -%}{%- endif -%}{%- endfor -%}
+    {%- if blankets == 0 -%}
+      <p class="mt-6 text-lg leading-relaxed text-charcoal/75">Your bag is empty. Every blanket comes with a free cloud pillow.</p>
+      <a href="/products/nuv-velvet-blanket" class="relative inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans font-medium tracking-[0.01em] transition-[background-color,color,border-color,text-decoration-color,transform] duration-300 ease-soft active:scale-[0.985] bg-charcoal text-ivory hover:bg-espresso h-14 px-8 text-[0.98rem] mt-8">Shop the blanket</a>
+    {%- else -%}
+      <ul class="mt-10 divide-y divide-charcoal/10 border-y border-charcoal/10">
+        {%- for item in cart.items -%}
+          <li class="flex items-center gap-4 py-5">
+            <div class="relative h-[6.5rem] w-[5.2rem] shrink-0 overflow-hidden rounded-soft bg-oat-soft">{%- if item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy">{%- endif -%}</div>
+            <div class="min-w-0 flex-1">
+              <p class="text-[0.95rem] font-medium leading-snug">{{ item.product.title }}</p>
+              {%- unless item.product.has_only_default_variant -%}<p class="mt-1 text-[0.82rem] text-charcoal/60">{{ item.variant.title | replace: ' / ', ' · ' }}</p>{%- endunless -%}
+              <p class="mt-1 text-[0.82rem] text-charcoal/60">Quantity {{ item.quantity }}</p>
+            </div>
+            <p class="shrink-0 text-[0.95rem] tabular-nums">{% if item.final_line_price == 0 %}<span class="font-medium text-mocha">Free</span>{% else %}{{ item.final_line_price | money }}{% endif %}</p>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <div class="mt-6 flex items-baseline justify-between text-[1.05rem]"><span class="font-medium">Subtotal</span><span class="font-medium tabular-nums">{{ cart.total_price | money }}</span></div>
+      <p class="mt-1 text-[0.9rem] text-charcoal/60">Free delivery. Arrives in 4–10 working days.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/checkout" class="relative inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans font-medium tracking-[0.01em] transition-[background-color,color,border-color,text-decoration-color,transform] duration-300 ease-soft active:scale-[0.985] bg-charcoal text-ivory hover:bg-espresso h-14 px-8 text-[0.98rem]">Checkout</a>
+        <button type="button" data-cart-button class="relative inline-flex h-14 items-center justify-center rounded-full border border-charcoal px-8 text-[0.98rem] font-medium text-charcoal transition-colors hover:bg-charcoal hover:text-ivory">Change quantities</button>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Bag", "settings": [] }
+{% endschema %}

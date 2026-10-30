@@ -1,0 +1,19 @@
+{%- liquid
+  assign full = false
+  if variant == 'full'
+    assign full = true
+  endif
+-%}
+{%- form 'localization', class: wrapper_class -%}
+  <label class="sr-only" for="Country-{{ id }}">Country and currency</label>
+  <select data-currency-select name="country_code" id="Country-{{ id }}" class="{{ select_class }}">
+    {%- for c in localization.available_countries -%}
+      <option value="{{ c.iso_code }}"{% if c.iso_code == localization.country.iso_code %} selected{% endif %}>
+        {{- c.currency.symbol }} {{ c.currency.iso_code -}}
+        {%- if full %} · {{ c.name }}{% elsif c.currency.iso_code == 'EUR' %} · {{ c.iso_code }}{% endif -%}
+      </option>
+    {%- endfor -%}
+  </select>
+  <input type="hidden" name="return_to" value="{{ request.path }}">
+  <svg aria-hidden="true" class="lucide lucide-chevron-down pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-charcoal/60" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+{%- endform -%}

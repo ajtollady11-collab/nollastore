@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "real-life": {
+      "type": "real-life",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {}
+    },
+    "moments": {
+      "type": "moments",
+      "settings": {}
+    },
+    "benefits": {
+      "type": "benefits",
+      "settings": {}
+    },
+    "story": {
+      "type": "story",
+      "settings": {}
+    },
+    "final-cta": {
+      "type": "final-cta",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "real-life",
+    "reviews",
+    "moments",
+    "benefits",
+    "story",
+    "final-cta"
+  ]
+}

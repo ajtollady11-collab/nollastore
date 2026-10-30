@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "main-product": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "gift": {
+      "type": "gift",
+      "settings": {}
+    },
+    "real-life": {
+      "type": "real-life",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {}
+    },
+    "fabric": {
+      "type": "fabric",
+      "settings": {}
+    },
+    "size-guide": {
+      "type": "size-guide",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main-product",
+    "gift",
+    "real-life",
+    "reviews",
+    "fabric",
+    "size-guide",
+    "faq"
+  ]
+}
