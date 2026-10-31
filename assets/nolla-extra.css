@@ -25,3 +25,4 @@ textarea.nolla-input { height: auto; min-height: 8rem; border-radius: 1rem; padd
 .nolla-hero-m__media { position: absolute; inset: 0; }
 .nolla-hero-m__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgb(247 243 236 / 0.94) 0%, rgb(247 243 236 / 0.82) 38%, rgb(247 243 236 / 0.35) 62%, rgb(247 243 236 / 0) 80%); }
 .nolla-hero-m__content { position: relative; padding-top: 10rem; }
+@media (min-width: 1024px) { .nolla-hero-m { display: none; } }
