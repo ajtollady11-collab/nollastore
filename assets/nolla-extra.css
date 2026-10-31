@@ -18,3 +18,10 @@
 .nolla-input { height: 3rem; width: 100%; border-radius: 9999px; border: 1px solid rgb(37 35 33 / 0.15); background: #FBF9F5; padding: 0 1.25rem; font-size: 1rem; color: #252321; outline: none; }
 .nolla-input:focus { border-color: rgb(37 35 33 / 0.5); }
 textarea.nolla-input { height: auto; min-height: 8rem; border-radius: 1rem; padding: 0.9rem 1.25rem; }
+
+/* Home hero on phones/tablets: text sits over the photo, like desktop */
+.nolla-hero-m { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: max(560px, min(calc(100vh - 6.5rem), 820px)); overflow: hidden; }
+@supports (height: 100svh) { .nolla-hero-m { min-height: max(560px, min(calc(100svh - 6.5rem), 820px)); } }
+.nolla-hero-m__media { position: absolute; inset: 0; }
+.nolla-hero-m__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgb(247 243 236 / 0.94) 0%, rgb(247 243 236 / 0.82) 38%, rgb(247 243 236 / 0.35) 62%, rgb(247 243 236 / 0) 80%); }
+.nolla-hero-m__content { position: relative; padding-top: 10rem; }
